@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GameData>
+	<Objects>
+		<Object id="0" type="nothing" src="images/road.png" width="32" height="32"/>
+		<Object id="1" type="collidable" src="images/brick.png" width="32" height="32"/>
+		<Object id="2" type="scenery" src="images/door1.png" width="32" height="32"/>
+		<Object id="3" type="bonus" src="images/coin.png" width="32" height="32"/>
+		<Object id="4" type="bonus" src="images/diamond1.png" width="32" height="32"/>
+		<Object id="5" type="bonus" src="images/diamond2.png" width="32" height="32"/>
+		<Object id="P" type="player" src="images/mageSprite.png" width="32" height="32"/>
+		<!--<Object id="E" type="enemy" src="images/evilMageSprite.png" width="32" height="32"/>-->
+	</Objects>
+	<Grid tileSize="32" width="25" height="20" background="#5C3F25">
+		<GridRow>11003001111030111111000P2</GridRow>
+		<GridRow>1131110150101010030101111</GridRow>
+		<GridRow>4001110110031000110130001</GridRow>
+		<GridRow>1111110011101111110001131</GridRow>
+		<GridRow>1130001300301500010101101</GridRow>
+		<GridRow>1101101111101011030101301</GridRow>
+		<GridRow>5001100300301001111130111</GridRow>
+		<GridRow>1111111111011100030110004</GridRow>
+		<GridRow>0301103001010031110011101</GridRow>
+		<GridRow>1101101100010110041001101</GridRow>
+		<GridRow>1101101111110110111103001</GridRow>
+		<GridRow>0300101000300310111111011</GridRow>
+		<GridRow>1110301011101010300100001</GridRow>
+		<GridRow>1100110311001041110131103</GridRow>
+		<GridRow>1101110111011100110100110</GridRow>
+		<GridRow>1101110111011113000110010</GridRow>
+		<GridRow>0300015030003001111111013</GridRow>
+		<GridRow>1111311111111100300003010</GridRow>
+		<GridRow>1100011500011001111111110</GridRow>
+		<GridRow>2031030011003011114000300</GridRow>
+	</Grid>
+</GameData>
