@@ -1,7 +1,7 @@
 /*===============================================================================================*/
 /*Общее */
 /*===============================================================================================*/
-*{
+* {
     margin: 0;
     padding: 0;
 }
@@ -42,13 +42,13 @@ h3 {
 /*===============================================================================================*/
 #game-wrap {
     background: #000;
-    border: 1px solid #222;
-    height: 600px;
-    width: 960px;
+    border: 5px solid #333;
+    height: 640px;
+    width: 800px;
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: -301px 0 0 -481px;
+    margin: -325px 0 0 -405px;
 }
 
 canvas {
@@ -57,6 +57,22 @@ canvas {
     left: 0;
     top: 0;
     display: block;
+}
+
+#main {
+    /*display: none;*/
+}
+
+#game {
+    display: none;
+}
+
+#mapCanvas {
+    z-index: 1;
+}
+
+#playerCanvas {
+    z-index: 3;
 }
 
 /*===============================================================================================*/
@@ -85,8 +101,8 @@ p.desc a:hover {
 /*===============================================================================================*/
 .menu {
     background: #111;
-    height: 550px;
-    width: 860px;
+    height: 590px;
+    width: 700px;
     padding: 50px 50px 0;
     position: absolute;
     left: 0;
@@ -95,7 +111,7 @@ p.desc a:hover {
 }
 
 #pause {
-    background: rgba(20,20,20,.5);
+    background: rgba(20, 20, 20, .5);
 }
 
 #main {
@@ -174,10 +190,21 @@ p.desc a:hover {
     font-style: normal;
 }
 
-#guide .pwrup1 { color: hsl(205, 100%, 50%); }
-#guide .pwrup2 { color: hsl(0, 100%, 50%); }
-#guide .pwrup3 { color: hsl(60, 100%, 50%); }
-#guide .pwrup4 { color: hsl(300, 100%, 50%); }
+#guide .pwrup1 {
+    color: hsl(205, 100%, 50%);
+}
+
+#guide .pwrup2 {
+    color: hsl(0, 100%, 50%);
+}
+
+#guide .pwrup3 {
+    color: hsl(60, 100%, 50%);
+}
+
+#guide .pwrup4 {
+    color: hsl(300, 100%, 50%);
+}
 
 /*===============================================================================================*/
 /*Обновление списка */
@@ -257,7 +284,7 @@ p.desc a:hover {
 }
 
 .button:hover span {
-    background: rgba(255,255,255,.05);
+    background: rgba(255, 255, 255, .05);
     color: #fff;
 }
 
