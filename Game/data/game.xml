@@ -1,35 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <GameData>
 	<Objects>
-		<Object id="0" type="nothing" src="images/road.png" width="32" height="32"/>
-		<Object id="1" type="collidable" src="images/brick.png" width="32" height="32"/>
-		<Object id="2" type="scenery" src="images/door1.png" width="32" height="32"/>
-		<Object id="3" type="bonus" src="images/coin.png" width="32" height="32"/>
-		<Object id="4" type="bonus" src="images/diamond1.png" width="32" height="32"/>
-		<Object id="5" type="bonus" src="images/diamond2.png" width="32" height="32"/>
-		<Object id="P" type="player" src="images/mageSprite.png" width="32" height="32"/>
-		<!--<Object id="E" type="enemy" src="images/evilMageSprite.png" width="32" height="32"/>-->
+		<!--People-->
+		<ObjectPeople id="0" type="nothing" src="images/ROAD_SAND_TILE.png" width="32" height="32"/>
+		<ObjectPeople id="1" type="collidable" src="images/WALL_BRICK.png" width="32" height="32"/>
+		<ObjectPeople id="2" type="scenery" src="images/DECORATE_DOOR.png" width="32" height="32"/>
+		<ObjectPeople id="3" type="teleport" src="images/MAGICAL_DOOR_CLOSE.png" width="32" height="32"
+		              src1="images/MAGICAL_DOOR_OPEN.png" width1="32" height1="32"/>
+		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
+		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
+		<ObjectPeople id="7" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
+		<ObjectPeople id="P" type="player" src="images/SPIRIT_PEOPLE.png" width="32" height="32"/>
+		<!--Spirit-->
+		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.png" width="32" height="32"/>
+		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.png" width="32" height="32"/>
+		<ObjectSpirit id="3" type="teleport" src="images/PORTAL_FROZEN.png" width="32" height="32"/>
+		<ObjectSpirit id="5" type="bonus" src="images/BONUS_MINERAL.png" width="32" height="32"/>
+		<!--Player-->
 	</Objects>
-	<Grid tileSize="32" width="25" height="20" background="#5C3F25">
-		<GridRow>11003001111030111111000P2</GridRow>
-		<GridRow>1131110150101010030101111</GridRow>
-		<GridRow>4001110110031000110130001</GridRow>
-		<GridRow>1111110011101111110001131</GridRow>
-		<GridRow>1130001300301500010101101</GridRow>
-		<GridRow>1101101111101011030101301</GridRow>
-		<GridRow>5001100300301001111130111</GridRow>
-		<GridRow>1111111111011100030110004</GridRow>
-		<GridRow>0301103001010031110011101</GridRow>
-		<GridRow>1101101100010110041001101</GridRow>
-		<GridRow>1101101111110110111103001</GridRow>
-		<GridRow>0300101000300310111111011</GridRow>
-		<GridRow>1110301011101010300100001</GridRow>
-		<GridRow>1100110311001041110131103</GridRow>
-		<GridRow>1101110111011100110100110</GridRow>
-		<GridRow>1101110111011113000110010</GridRow>
-		<GridRow>0300015030003001111111013</GridRow>
-		<GridRow>1111311111111100300003010</GridRow>
-		<GridRow>1100011500011001111111110</GridRow>
-		<GridRow>2031030011003011114000300</GridRow>
+	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
+		<!--People-->
+		<GridRow id="people">11005001111050111111000P2</GridRow>
+		<GridRow id="people">1151110170101010050101111</GridRow>
+		<GridRow id="people">6001110110051000110150001</GridRow>
+		<GridRow id="people">1111110011101111110001151</GridRow>
+		<GridRow id="people">1150011500501700010101101</GridRow>
+		<GridRow id="people">1101001111101011050101151</GridRow>
+		<GridRow id="people">7001100500501001111150111</GridRow>
+		<GridRow id="people">1111111111011000050110006</GridRow>
+		<GridRow id="people">0501105001010011110011101</GridRow>
+		<GridRow id="people">1101101100010110611001101</GridRow>
+		<GridRow id="people">1101101111110110111105001</GridRow>
+		<GridRow id="people">0500001000500510111111011</GridRow>
+		<GridRow id="people">1110111011101010500100001</GridRow>
+		<GridRow id="people">1100110511001011110151105</GridRow>
+		<GridRow id="people">1101110111011600110100110</GridRow>
+		<GridRow id="people">1101110111011115000110010</GridRow>
+		<GridRow id="people">0500017050005011111111015</GridRow>
+		<GridRow id="people">1111111111111000500005010</GridRow>
+		<GridRow id="people">1100011700011311111111110</GridRow>
+		<GridRow id="people">2051050011005011116000500</GridRow>
+		<!--Spirit-->
+		<GridRow id="spirit">1505050505010105050505051</GridRow>
+		<GridRow id="spirit">1011111111010101111111101</GridRow>
+		<GridRow id="spirit">1505050311000001050501151</GridRow>
+		<GridRow id="spirit">1011111111010111511111101</GridRow>
+		<GridRow id="spirit">1505050505010111050505051</GridRow>
+		<GridRow id="spirit">1111111111110111111111111</GridRow>
+		<GridRow id="spirit">1000000000010100000000001</GridRow>
+		<GridRow id="spirit">1551515151000001151515101</GridRow>
+		<GridRow id="spirit">1551515151010101151515101</GridRow>
+		<GridRow id="spirit">1000000000010100000000001</GridRow>
+		<GridRow id="spirit">1111111111110111115555551</GridRow>
+		<GridRow id="spirit">1000000001505050511111111</GridRow>
+		<GridRow id="spirit">1151511101050505015050501</GridRow>
+		<GridRow id="spirit">5551555100505050500505051</GridRow>
+		<GridRow id="spirit">1111111101050505015050501</GridRow>
+		<GridRow id="spirit">1000000001505050511111101</GridRow>
+		<GridRow id="spirit">1511111111111011115050501</GridRow>
+		<GridRow id="spirit">1511005551110001510505051</GridRow>
+		<GridRow id="spirit">1000015551110001510111111</GridRow>
+		<GridRow id="spirit">1111115551110001500111111</GridRow>
 	</Grid>
 </GameData>

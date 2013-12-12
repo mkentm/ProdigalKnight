@@ -1,31 +1,61 @@
+var idPlayerCanvas;
 var playerCanvas;
 var playerContext;
-var mapCanvas;
-var mapContext;
+var idPeopleCanvas;
+var peopleCanvas;
+var peopleContext;
+var idSpiritCanvas;
+var spiritCanvas;
+var spiritContext;
 
 var mapW;
 var mapH;
 var gameW;
 var gameH;
-var gameBackground;
+var gameBackgroundPeople;
+var gameBackgroundSpirit;
 var tileSize;
 
 var savedData = null;
 var lastUpdate = null;
-var gameObjects = null;
+var gamePeopleObjects = null;
+var gameSpiritObjects = null;
 var hero = null;
-var collidables = [];
-var scenery = [];
-var bonuses = [];
+
+var collidablesPeople = [];
+var collidablesSpirit = [];
+var teleportPeople = [];
+var teleportSpirit = [];
+var sceneryPeople = [];
+var scenerySpirit = [];
+var bonusesPeople = [];
+var bonusesSpirit = [];
+var isPeopleMap = true;
+
+var isCountdown;
+var isTeleport;
+var teleportEndTick;
+var teleportEndTickMax;
+
+var abilityToMove;
 
 var fps = 30;
 var timerRatio = 1000 / fps;
+
+var dt;
+var oldTime;
 
 /*===================================================================================================================*/
 /*Загрузка */
 /*===================================================================================================================*/
 $(document).ready(function () {
-    $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
+    hideMaps();
+    idPeopleCanvas = get("peopleCanvas");
+    idSpiritCanvas = get("spiritCanvas");
+    idPlayerCanvas = get("playerCanvas");
+    $(idPeopleCanvas).stop().fadeTo(0, 1, function () {
+        $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
+    });
 });
 
 $(document).keydown(function (event) {
@@ -51,31 +81,73 @@ $(document).keyup(function (event) {
 /*===================================================================================================================*/
 /*Инициализация */
 /*===================================================================================================================*/
+function hideMaps() {
+    $(document.querySelectorAll('.map')).fadeTo(0, 0, function () {
+        $(this).hide();
+    });
+}
+
+function get(a) {
+    return document.getElementById(a);
+}
+
 function processLoadGameData(data) {
     savedData = data;
     initGame();
 }
 
 function initGame() {
+    initData();
     initGameBoard();
-    setCanvasValues();
+    initCanvas();
     initGameTiles();
 
     lastUpdate = Date.now();
     setInterval(gameLoop, 16);
 }
 
+function initData() {
+    isPeopleMap = true;
+    isCountdown = false;
+    isTeleport = false;
+    abilityToMove = true;
+
+    // delta
+    dt = 0;
+    oldTime = Date.now();
+    teleportEndTick = 0;
+    teleportEndTickMax = 20;//150;
+}
+
 function initGameBoard() {
-    gameObjects = [];
-    jQuery(savedData).find("Object").each(
+    gamePeopleObjects = [];
+    gameSpiritObjects = [];
+    jQuery(savedData).find("ObjectPeople").each(
         function () {
             var index = jQuery(this).attr("id");
-            gameObjects[index] = new gameObject();
-            gameObjects[index].id = index;
-            gameObjects[index].width = parseInt(jQuery(this).attr("width"));
-            gameObjects[index].height = parseInt(jQuery(this).attr("height"));
-            gameObjects[index].imageSrc = jQuery(this).attr("src");
-            gameObjects[index].type = jQuery(this).attr("type");
+            gamePeopleObjects[index] = new gameObject();
+            gamePeopleObjects[index].id = index;
+            gamePeopleObjects[index].width = parseInt(jQuery(this).attr("width"));
+            gamePeopleObjects[index].height = parseInt(jQuery(this).attr("height"));
+            gamePeopleObjects[index].imageSrc = jQuery(this).attr("src");
+            gamePeopleObjects[index].type = jQuery(this).attr("type");
+            if (gamePeopleObjects[index].type.toString() == "teleport") {
+                gamePeopleObjects[index].width1 = parseInt(jQuery(this).attr("width1"));
+                gamePeopleObjects[index].height1 = parseInt(jQuery(this).attr("height1"));
+                gamePeopleObjects[index].imageSrc1 = jQuery(this).attr("src1");
+            }
+        }
+    );
+
+    jQuery(savedData).find("ObjectSpirit").each(
+        function () {
+            var index = jQuery(this).attr("id");
+            gameSpiritObjects[index] = new gameObject();
+            gameSpiritObjects[index].id = index;
+            gameSpiritObjects[index].width = parseInt(jQuery(this).attr("width"));
+            gameSpiritObjects[index].height = parseInt(jQuery(this).attr("height"));
+            gameSpiritObjects[index].imageSrc = jQuery(this).attr("src");
+            gameSpiritObjects[index].type = jQuery(this).attr("type");
         }
     );
 
@@ -86,86 +158,127 @@ function initGameBoard() {
             mapH = parseInt(jQuery(this).attr("height"));
             gameW = mapW * tileSize;
             gameH = mapH * tileSize;
-            gameBackground = jQuery(this).attr("background");
+            gameBackgroundPeople = jQuery(this).attr("backgroundPeople");
+            gameBackgroundSpirit = jQuery(this).attr("backgroundSpirit");
         }
     );
 }
 
 function gameObject() {
+    this.id = null;
     this.width = null;
     this.height = null;
     this.imageSrc = null;
+    this.width1 = null;
+    this.height1 = null;
+    this.imageSrc1 = null;
     this.type = null;
 }
 
-function setCanvasValues() {
-    initCanvas();
+function initCanvas() {
+    peopleCanvas = getCanvas(idPeopleCanvas, gameW, gameH);
+    peopleContext = getContext(peopleCanvas, gameW, gameH, gameBackgroundPeople);
+    peopleContext.save();
 
-    mapContext.save();
+    spiritCanvas = getCanvas(idSpiritCanvas, gameW, gameH);
+    spiritContext = getContext(spiritCanvas, gameW, gameH, gameBackgroundSpirit);
+    spiritContext.save();
+
+    playerCanvas = getCanvas(idPlayerCanvas, gameW, gameH);
+    playerContext = playerCanvas.getContext("2d");
     playerContext.save();
 }
 
-function initCanvas() {
-    mapCanvas = document.getElementById("mapCanvas");
-    mapContext = mapCanvas.getContext("2d");
-    mapCanvas.width = gameW;
-    mapCanvas.height = gameH;
-    mapContext.fillStyle = gameBackground;
-    mapContext.fillRect(0, 0, gameW, gameH);
+function getCanvas(id, width, height) {
+    id.width = width;
+    id.height = height;
+    return id;
+}
 
-    playerCanvas = document.getElementById("playerCanvas");
-    playerContext = playerCanvas.getContext("2d");
-    playerCanvas.width = gameW;
-    playerCanvas.height = gameH;
+function getContext(canvas, width, height, background) {
+    var context = canvas.getContext("2d");
+    if (background) {
+        context.fillStyle = background;
+        context.fillRect(0, 0, width, height);
+    }
+    context.save();
+    return context;
 }
 
 function initGameTiles() {
-    var collidablesCount = 0;
-    var sceneryCount = 0;
-    var bonusesCount = 0;
+    var collidablePeopleCount = 0;
+    var collidableSpiritCount = 0;
+    var teleportPeopleCount = 0;
+    var teleportSpiritCount = 0;
+    var sceneryPeopleCount = 0;
+    var scenerySpiritCount = 0;
+    var bonusesPeopleCount = 0;
+    var bonusesSpiritCount = 0;
 
     var i = 0;
     jQuery(savedData).find("GridRow").each(
         function () {
+            var index = jQuery(this).attr("id");
             var text = jQuery(this).text();
 
             if (i >= mapH) {
                 i -= mapH;
             }
 
-//            console.log("text = " + text);
-
             for (var j = 0; j < text.length; j++) {
                 var objIndex = text[j];
-//                console.log("index = " + objIndex);
-//                console.log("gameObjects = ", gameObjects[objIndex]);
-                if (gameObjects[objIndex].type == "nothing") {
+                if (index == "people") {
+                    if (gamePeopleObjects[objIndex].type.toString() == "nothing") {
 
-                }
-                if (gameObjects[objIndex].type == "collidable") {
-                    drawImageObjects(collidables, collidablesCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
-                    collidablesCount++;
-                }
-                if (gameObjects[objIndex].type == "scenery") {
-                    drawImageObjects(scenery, sceneryCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
-                    sceneryCount++;
-                }
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "collidable") {
+                        drawImageObjects(collidablesPeople, collidablePeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
+                        collidablePeopleCount++;
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "teleport") {
+                        drawImageObjects(teleportPeople, teleportPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
+                        teleportPeopleCount++;
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "scenery") {
+                        drawImageObjects(sceneryPeople, sceneryPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
+                        sceneryPeopleCount++;
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "bonus") {
+                        drawImageObjects(bonusesPeople, bonusesPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
+                        bonusesPeopleCount++;
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "player") {
+                        hero = new heroObject();
+                        hero.imageWidth = gamePeopleObjects[objIndex].width;
+                        hero.imageHeight = gamePeopleObjects[objIndex].height;
+                        hero.x = j * tileSize;
+                        hero.y = i * tileSize;
+                        hero.image = new Image();
+                        hero.image.src = gamePeopleObjects[objIndex].imageSrc;
+                        hero.image.onload = function () {
+                            hero.render();
+                        };
+                    }
+                } else {
+                    if (gameSpiritObjects[objIndex].type.toString() == "nothing") {
 
-                if (gameObjects[objIndex].type == "bonus") {
-                    drawImageObjects(bonuses, bonusesCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
-                    bonusesCount++;
-                }
-                if (gameObjects[objIndex].type == "player") {
-                    hero = new heroObject();
-                    hero.imageWidth = gameObjects[objIndex].width;
-                    hero.imageHeight = gameObjects[objIndex].height;
-                    hero.x = j * tileSize;
-                    hero.y = i * tileSize;
-                    hero.image = new Image();
-                    hero.image.src = gameObjects[objIndex].imageSrc;
-                    hero.image.onload = function () {
-                        hero.render();
-                    };
+                    }
+                    if (gameSpiritObjects[objIndex].type.toString() == "collidable") {
+                        drawImageObjects(collidablesSpirit, collidableSpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
+                        collidableSpiritCount++;
+                    }
+                    if (gameSpiritObjects[objIndex].type.toString() == "teleport") {
+                        drawImageObjects(teleportSpirit, teleportSpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
+                        teleportSpiritCount++;
+                    }
+                    if (gameSpiritObjects[objIndex].type.toString() == "scenery") {
+                        drawImageObjects(scenerySpirit, scenerySpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
+                        scenerySpiritCount++;
+                    }
+                    if (gameSpiritObjects[objIndex].type.toString() == "bonus") {
+                        drawImageObjects(bonusesSpirit, bonusesSpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
+                        bonusesSpiritCount++;
+                    }
                 }
             }
             i++;
@@ -173,23 +286,14 @@ function initGameTiles() {
     );
 }
 
-function drawImage() {
-    this.width = 32;
-    this.height = 32;
-    this.imageSizeWidth = 32;
-    this.imageSizeHeight = 32;
-    this.x = null;
-    this.y = null;
-    this.image = null;
-    this.render = function () {
-        mapContext.drawImage(this.image, 0, 0, this.imageSizeWidth, this.imageSizeHeight, this.x, this.y, this.width, this.height);
-    };
-}
-
-function drawImageObjects(objects, objIndex, gameObject, x, y, tileSizeW, tileSizeH) {
-    objects[objIndex] = new drawImage();
+function drawImageObjects(objects, objIndex, gameObject, x, y, tileSizeW, tileSizeH, isMapPeople) {
+    objects[objIndex] = new drawImageMap();
+    objects[objIndex].id = gameObject.id;
+    objects[objIndex].isMapPeople = isMapPeople;
     objects[objIndex].imageSizeWidth = gameObject.width;
     objects[objIndex].imageSizeHeight = gameObject.height;
+    objects[objIndex].imageSizeWidth1 = gameObject.width1;
+    objects[objIndex].imageSizeHeight1 = gameObject.height1;
     objects[objIndex].width = tileSizeW;
     objects[objIndex].height = tileSizeH;
     objects[objIndex].x = x;
@@ -197,9 +301,34 @@ function drawImageObjects(objects, objIndex, gameObject, x, y, tileSizeW, tileSi
     objects[objIndex].image = new Image();
     objects[objIndex].image.src = gameObject.imageSrc;
     objects[objIndex].image.index = objIndex;
+    objects[objIndex].image1 = new Image();
+    objects[objIndex].image1.src = gameObject.imageSrc1;
+    objects[objIndex].image1.index = objIndex;
     $(objects[objIndex].image).load(function () {
         objects[this.index].render();
     });
+}
+
+function drawImageMap() {
+    this.id = null;
+    this.isMapPeople = null;
+    this.width = 32;
+    this.height = 32;
+    this.imageSizeWidth = 32;
+    this.imageSizeHeight = 32;
+    this.imageSizeWidth1 = 32;
+    this.imageSizeHeight1 = 32;
+    this.x = null;
+    this.y = null;
+    this.image = null;
+    this.image1 = null;
+    this.render = function () {
+        if (this.isMapPeople) {
+            peopleContext.drawImage(this.image, 0, 0, this.imageSizeWidth, this.imageSizeHeight, this.x, this.y, this.width, this.height);
+        } else {
+            spiritContext.drawImage(this.image, 0, 0, this.imageSizeWidth, this.imageSizeHeight, this.x, this.y, this.width, this.height);
+        }
+    };
 }
 
 function heroObject() {
@@ -207,9 +336,10 @@ function heroObject() {
     this.imageHeight = 32;
     this.width = Math.floor(this.imageWidth * 0.8);
     this.height = Math.floor(this.imageHeight * 0.8);
-    // Помещаем его в рандомное место на экране.
     this.x = null;
     this.y = null;
+    this.portX = null;
+    this.portY = null;
     // Массив для хранения информации о том, какие быстрые клавиши нажимаются
     this.keys = [];
     // Когда в последний раз мы рисовали героя на экране
@@ -240,74 +370,154 @@ function heroObject() {
         var now = Date.now();
         // Сколько времени прошло с тех пор, как мы в последний раз обновили спрайт
         var delta = now - this.lastRender;
+        updateDelta();
 
-        switch (this.keys[this.keys.length - 1]) {
-            case 37:
-                // move the hero left on the screen
-                this.x -= this.moveSpeed * elapsed;
-                if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 2 && this.whichSprite != this.imageWidth * 3)) {
-                    this.whichSprite = this.whichSprite == this.imageWidth * 2 ? this.imageWidth * 3 : this.imageWidth * 2;
-                    this.lastRender = now;
-                }
-                break;
-            case 38:
-                // move the hero up on the screen
-                this.y -= this.moveSpeed * elapsed;
-                if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 6 && this.whichSprite != this.imageWidth * 7)) {
-                    this.whichSprite = this.whichSprite == this.imageWidth * 6 ? this.imageWidth * 7 : this.imageWidth * 6;
-                    this.lastRender = now;
-                }
-                break;
-            case 39:
-                // move the hero right on the screen
+        if (abilityToMove) {
+            switch (this.keys[this.keys.length - 1]) {
+                case 37:
+                    // move the hero left on the screen
+                    this.x -= this.moveSpeed * elapsed;
+                    if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 2 && this.whichSprite != this.imageWidth * 3)) {
+                        this.whichSprite = this.whichSprite == this.imageWidth * 2 ? this.imageWidth * 3 : this.imageWidth * 2;
+                        this.lastRender = now;
+                    }
+                    break;
+                case 38:
+                    // move the hero up on the screen
+                    this.y -= this.moveSpeed * elapsed;
+                    if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 6 && this.whichSprite != this.imageWidth * 7)) {
+                        this.whichSprite = this.whichSprite == this.imageWidth * 6 ? this.imageWidth * 7 : this.imageWidth * 6;
+                        this.lastRender = now;
+                    }
+                    break;
+                case 39:
+                    // move the hero right on the screen
+                    this.x += this.moveSpeed * elapsed;
+                    if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 4 && this.whichSprite != this.imageWidth * 5)) {
+                        this.whichSprite = this.whichSprite == this.imageWidth * 4 ? this.imageWidth * 5 : this.imageWidth * 4;
+                        this.lastRender = now;
+                    }
+                    break;
+                case 40:
+                    // move the hero down on the screen
+                    this.y += this.moveSpeed * elapsed;
+                    if (delta > this.animSpeed || (this.whichSprite != 0 && this.whichSprite != this.imageWidth)) {
+                        this.whichSprite = this.whichSprite == 0 ? this.imageWidth : 0;
+                        this.lastRender = now;
+                    }
+                    break;
+            }
+
+            if (this.x < 0) {
                 this.x += this.moveSpeed * elapsed;
-                if (delta > this.animSpeed || (this.whichSprite != this.imageWidth * 4 && this.whichSprite != this.imageWidth * 5)) {
-                    this.whichSprite = this.whichSprite == this.imageWidth * 4 ? this.imageWidth * 5 : this.imageWidth * 4;
-                    this.lastRender = now;
-                }
-                break;
-            case 40:
-                // move the hero down on the screen
+            }
+            if (this.x + this.width >= gameW) {
+                this.x -= this.moveSpeed * elapsed;
+            }
+            if (this.y < 0) {
                 this.y += this.moveSpeed * elapsed;
-                if (delta > this.animSpeed || (this.whichSprite != 0 && this.whichSprite != this.imageWidth)) {
-                    this.whichSprite = this.whichSprite == 0 ? this.imageWidth : 0;
-                    this.lastRender = now;
+            }
+            if (this.y + this.height >= gameH) {
+                this.y -= this.moveSpeed * elapsed;
+            }
+        }
+
+        if (isCountdown) {
+            if (teleportEndTick <= 0) {
+                isCountdown = !isCountdown;
+                abilityToMove = !abilityToMove;
+            } else {
+                teleportEndTick -= dt;
+            }
+        }
+
+        if (isTeleport) {
+            if (teleportEndTick >= teleportEndTickMax) {
+                isCountdown = !isCountdown;
+                isPeopleMap = !isPeopleMap;
+                isTeleport = !isTeleport;
+                hideMaps();
+                if (isPeopleMap) {
+                    $(idPeopleCanvas).stop().fadeTo(0, 1, port(this));
+                } else {
+                    $(idSpiritCanvas).stop().fadeTo(0, 1, port(this));
                 }
-                break;
-        }
-
-        if (this.x < 0) {
-            this.x += this.moveSpeed * elapsed;
-        }
-        if (this.x + this.width >= gameW) {
-            this.x -= this.moveSpeed * elapsed;
-        }
-        if (this.y < 0) {
-            this.y += this.moveSpeed * elapsed;
-        }
-        if (this.y + this.height >= gameH) {
-            this.y -= this.moveSpeed * elapsed;
-        }
-
-        for (var iter in collidables) {
-            if (this.checkCollision(collidables[iter])) {
-                this.x = prevX;
-                this.y = prevY;
-                break;
+            } else {
+                teleportEndTick += dt;
             }
         }
 
-        for (var iter in bonuses) {
-            if (this.checkCollision(bonuses[iter])) {
-                mapContext.fillStyle = gameBackground;
-                mapContext.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
-//                bonuses.splice (bonuses[iter-1],1);
-                break;
-            }
-        }
+        isPeopleMap ?
+            check(this, collidablesPeople, teleportPeople, sceneryPeople, bonusesPeople, prevX, prevY, peopleContext, gameBackgroundPeople) :
+            check(this, collidablesSpirit, teleportSpirit, scenerySpirit, bonusesSpirit, prevX, prevY, spiritContext, gameBackgroundSpirit);
     };
+}
 
-};
+function check(player, collidables, teleport, scenery, bonuses, prevX, prevY, context, background) {
+    var iter;
+    for (iter in collidables) {
+        if (this.checkCollision(player, collidables[iter])) {
+            player.x = prevX;
+            player.y = prevY;
+            break;
+        }
+    }
+
+    for (iter in teleport) {
+        if (this.checkBonus(player, teleport[iter])) {
+            abilityToMove = false;
+            isTeleport = true;
+        }
+    }
+
+    for (iter in bonuses) {
+        if (this.checkCollision(player, bonuses[iter])) {
+            context.fillStyle = background;
+            context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
+            delete bonuses[iter];
+            break;
+        }
+    }
+}
+
+function checkCollision(player, obj) {
+    if ((player.x < (obj.x + obj.width - 1) && Math.floor(player.x + player.width - 1) > obj.x)
+        && (player.y < (obj.y + obj.height - 1) && Math.floor(player.y + player.height - 1) > obj.y)) {
+        return true;
+    }
+}
+
+function checkBonus(player, obj) {
+    if ((obj.x - 2) <= player.x && ((player.x + player.width) <= (obj.x + obj.width + 2))
+        && (obj.y - 2) <= player.y && ((player.y + player.height) <= (obj.y + obj.height + 2))) {
+        return true;
+    }
+}
+
+function port(player) {
+    if (isPeopleMap) {
+        player.x = player.portX;
+        player.y = player.portY;
+        for (var iter in teleportPeople) {
+            if (checkBonus(player, teleportPeople[iter])) {
+                peopleContext.fillRect(teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
+                peopleContext.drawImage(teleportPeople[iter].image1, 0, 0, teleportPeople[iter].imageSizeWidth1, teleportPeople[iter].imageSizeHeight1,
+                    teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
+                delete teleportPeople[iter];
+            }
+        }
+    } else {
+        player.portX = player.x;
+        player.portY = player.y;
+    }
+}
+
+function updateDelta() {
+    var newTime = Date.now();
+    dt = (newTime - oldTime) / 16;
+    dt = (dt > 10) ? 10 : dt;
+    oldTime = newTime;
+}
 
 function gameLoop() {
     var now = Date.now();
