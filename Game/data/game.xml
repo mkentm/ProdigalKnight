@@ -7,6 +7,8 @@
 		<ObjectPeople id="2" type="scenery" src="images/DECORATE_DOOR.png" width="32" height="32"/>
 		<ObjectPeople id="3" type="teleport" src="images/MAGICAL_DOOR_CLOSE.png" width="32" height="32"
 		              src1="images/MAGICAL_DOOR_OPEN.png" width1="32" height1="32"/>
+		<ObjectPeople id="4" type="mechanical" src="images/MANA_FULL.png" width="32" height="32"
+		              src1="images/MANA_EMPTY.png" width1="32" height1="32"/>
 		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
 		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
 		<ObjectPeople id="7" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
@@ -29,17 +31,17 @@
 		<GridRow id="people">7001100500501001111150111</GridRow>
 		<GridRow id="people">1111111111011000050110006</GridRow>
 		<GridRow id="people">0501105001010011110011101</GridRow>
-		<GridRow id="people">1101101100010110611001101</GridRow>
-		<GridRow id="people">1101101111110110111105001</GridRow>
+		<GridRow id="people">1101101100010110411001101</GridRow>
+		<GridRow id="people">1101101111110116111105001</GridRow>
 		<GridRow id="people">0500001000500510111111011</GridRow>
 		<GridRow id="people">1110111011101010500100001</GridRow>
 		<GridRow id="people">1100110511001011110151105</GridRow>
 		<GridRow id="people">1101110111011600110100110</GridRow>
 		<GridRow id="people">1101110111011115000110010</GridRow>
-		<GridRow id="people">0500017050005011111111015</GridRow>
+		<GridRow id="people">0500417050005011111111015</GridRow>
 		<GridRow id="people">1111111111111000500005010</GridRow>
 		<GridRow id="people">1100011700011311111111110</GridRow>
-		<GridRow id="people">2051050011005011116000500</GridRow>
+		<GridRow id="people">2051050011005011114060500</GridRow>
 		<!--Spirit-->
 		<GridRow id="spirit">1505050505010105050505051</GridRow>
 		<GridRow id="spirit">1011111111010101111111101</GridRow>

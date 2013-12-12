@@ -27,6 +27,8 @@ var hero = null;
 
 var collidablesPeople = [];
 var collidablesSpirit = [];
+var mechanicalPeople = [];
+var mechanicalSpirit = [];
 var teleportPeople = [];
 var teleportSpirit = [];
 var sceneryPeople = [];
@@ -140,7 +142,8 @@ function initGameBoard() {
             gamePeopleObjects[index].height = parseInt(jQuery(this).attr("height"));
             gamePeopleObjects[index].imageSrc = jQuery(this).attr("src");
             gamePeopleObjects[index].type = jQuery(this).attr("type");
-            if (gamePeopleObjects[index].type.toString() == "teleport") {
+            if (gamePeopleObjects[index].type.toString() == "teleport" ||
+                gamePeopleObjects[index].type.toString() == "mechanical") {
                 gamePeopleObjects[index].width1 = parseInt(jQuery(this).attr("width1"));
                 gamePeopleObjects[index].height1 = parseInt(jQuery(this).attr("height1"));
                 gamePeopleObjects[index].imageSrc1 = jQuery(this).attr("src1");
@@ -221,6 +224,8 @@ function getContext(canvas, width, height, background) {
 function initGameTiles() {
     var collidablePeopleCount = 0;
     var collidableSpiritCount = 0;
+    var mechanicalPeopleCount = 0;
+    var mechanicalSpiritCount = 0;
     var teleportPeopleCount = 0;
     var teleportSpiritCount = 0;
     var sceneryPeopleCount = 0;
@@ -251,6 +256,10 @@ function initGameTiles() {
                     if (gamePeopleObjects[objIndex].type.toString() == "teleport") {
                         drawImageObjects(teleportPeople, teleportPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
                         teleportPeopleCount++;
+                    }
+                    if (gamePeopleObjects[objIndex].type.toString() == "mechanical") {
+                        drawImageObjects(mechanicalPeople, mechanicalPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
+                        mechanicalPeopleCount++;
                     }
                     if (gamePeopleObjects[objIndex].type.toString() == "scenery") {
                         drawImageObjects(sceneryPeople, sceneryPeopleCount, gamePeopleObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, true);
@@ -283,6 +292,10 @@ function initGameTiles() {
                     if (gameSpiritObjects[objIndex].type.toString() == "teleport") {
                         drawImageObjects(teleportSpirit, teleportSpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
                         teleportSpiritCount++;
+                    }
+                    if (gameSpiritObjects[objIndex].type.toString() == "mechanical") {
+                        drawImageObjects(mechanicalSpirit, mechanicalSpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
+                        mechanicalSpiritCount++;
                     }
                     if (gameSpiritObjects[objIndex].type.toString() == "scenery") {
                         drawImageObjects(scenerySpirit, scenerySpiritCount, gameSpiritObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize, false);
@@ -365,6 +378,7 @@ function heroObject() {
     this.whichSprite = 0;
     // На сколько пикселей мы хотим переместить героя каждый цикл
     this.moveSpeed = 4;
+    this.mana = 0;
 
     this.render = function () {
         playerContext.drawImage(this.image, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
@@ -468,12 +482,12 @@ function heroObject() {
         }
 
         isPeopleMap ?
-            check(this, collidablesPeople, teleportPeople, sceneryPeople, bonusesPeople, prevX, prevY, peopleContext, gameBackgroundPeople) :
-            check(this, collidablesSpirit, teleportSpirit, scenerySpirit, bonusesSpirit, prevX, prevY, spiritContext, gameBackgroundSpirit);
+            check(this, collidablesPeople, teleportPeople, mechanicalPeople, sceneryPeople, bonusesPeople, prevX, prevY, peopleContext, gameBackgroundPeople) :
+            check(this, collidablesSpirit, teleportSpirit, mechanicalSpirit, scenerySpirit, bonusesSpirit, prevX, prevY, spiritContext, gameBackgroundSpirit);
     };
 }
 
-function check(player, collidables, teleport, scenery, bonuses, prevX, prevY, context, background) {
+function check(player, collidables, teleport, mechanical, scenery, bonuses, prevX, prevY, context, background) {
     var iter;
     for (iter in collidables) {
         if (this.checkCollision(player, collidables[iter])) {
@@ -484,15 +498,32 @@ function check(player, collidables, teleport, scenery, bonuses, prevX, prevY, co
     }
 
     for (iter in teleport) {
-        if (this.checkBonus(player, teleport[iter])) {
-            abilityToMove = false;
-            isTeleport = true;
+        if (player.mana == 3) {
+            if (this.checkBonus(player, teleport[iter])) {
+                abilityToMove = false;
+                isTeleport = true;
+            }
+        } else {
+            if (this.checkCollision(player, teleport[iter])) {
+                player.x = prevX;
+                player.y = prevY;
+                break;
+            }
+        }
+    }
+
+    for (iter in mechanical) {
+        if (this.checkBonus(player, mechanical[iter])) {
+            context.fillRect(mechanical[iter].x, mechanical[iter].y, mechanical[iter].width, mechanical[iter].height);
+            context.drawImage(mechanical[iter].image1, 0, 0, mechanical[iter].imageSizeWidth1, mechanical[iter].imageSizeHeight1,
+                mechanical[iter].x, mechanical[iter].y, mechanical[iter].width, mechanical[iter].height);
+            delete mechanical[iter];
+            player.mana += 1;
         }
     }
 
     for (iter in bonuses) {
         if (this.checkCollision(player, bonuses[iter])) {
-            context.fillStyle = background;
             context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
             delete bonuses[iter];
             break;
@@ -524,6 +555,7 @@ function port(player) {
                 peopleContext.drawImage(teleportPeople[iter].image1, 0, 0, teleportPeople[iter].imageSizeWidth1, teleportPeople[iter].imageSizeHeight1,
                     teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
                 delete teleportPeople[iter];
+                player.mana -= 3;
             }
         }
     } else {
