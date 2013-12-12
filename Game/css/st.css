@@ -67,12 +67,24 @@ canvas {
     display: none;
 }
 
-#mapCanvas {
-    z-index: 1;
+.map {
+    z-index: 2;
+}
+
+#peopleCanvas {
+    display: none;
+}
+
+#spiritCanvas {
+    display: none;
 }
 
 #playerCanvas {
     z-index: 3;
+}
+
+#teleportCanvas {
+    z-index: 4;
 }
 
 /*===============================================================================================*/

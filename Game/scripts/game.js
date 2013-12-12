@@ -7,6 +7,9 @@ var peopleContext;
 var idSpiritCanvas;
 var spiritCanvas;
 var spiritContext;
+var idTeleportCanvas;
+var teleportCanvas;
+var teleportContext;
 
 var mapW;
 var mapH;
@@ -41,6 +44,7 @@ var abilityToMove;
 
 var fps = 30;
 var timerRatio = 1000 / fps;
+var animationSpeed = 300;
 
 var dt;
 var oldTime;
@@ -53,8 +57,13 @@ $(document).ready(function () {
     idPeopleCanvas = get("peopleCanvas");
     idSpiritCanvas = get("spiritCanvas");
     idPlayerCanvas = get("playerCanvas");
-    $(idPeopleCanvas).stop().fadeTo(0, 1, function () {
-        $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
+    idTeleportCanvas = get("teleportCanvas");
+    $(idPlayerCanvas).hide();
+    $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
+    $(idPeopleCanvas).stop().fadeTo(animationSpeed * 8, 1, function () {
+        $(idPlayerCanvas).stop().fadeTo(animationSpeed, 1, function () {
+            abilityToMove = true;
+        });
     });
 });
 
@@ -82,7 +91,7 @@ $(document).keyup(function (event) {
 /*Инициализация */
 /*===================================================================================================================*/
 function hideMaps() {
-    $(document.querySelectorAll('.map')).fadeTo(0, 0, function () {
+    $(document.querySelectorAll('.map')).fadeTo(animationSpeed, 0, function () {
         $(this).hide();
     });
 }
@@ -110,13 +119,13 @@ function initData() {
     isPeopleMap = true;
     isCountdown = false;
     isTeleport = false;
-    abilityToMove = true;
+    abilityToMove = false;
 
     // delta
     dt = 0;
     oldTime = Date.now();
     teleportEndTick = 0;
-    teleportEndTickMax = 20;//150;
+    teleportEndTickMax = 150;
 }
 
 function initGameBoard() {
@@ -185,8 +194,12 @@ function initCanvas() {
     spiritContext.save();
 
     playerCanvas = getCanvas(idPlayerCanvas, gameW, gameH);
-    playerContext = playerCanvas.getContext("2d");
+    playerContext = getContext(playerCanvas, gameW, gameH, null);
     playerContext.save();
+
+    teleportCanvas = getCanvas(idTeleportCanvas, gameW, gameH);
+    teleportContext = getContext(teleportCanvas, gameW, gameH, null);
+    teleportContext.save();
 }
 
 function getCanvas(id, width, height) {
@@ -423,7 +436,11 @@ function heroObject() {
         }
 
         if (isCountdown) {
+            teleportContext.clearRect(0, 0, gameW, gameH);
+            teleportContext.fillStyle = 'rgba(255,255,255,' + teleportEndTick / teleportEndTickMax + ')';
+            teleportContext.fillRect(0, 0, gameW, gameH);
             if (teleportEndTick <= 0) {
+                teleportContext.restore();
                 isCountdown = !isCountdown;
                 abilityToMove = !abilityToMove;
             } else {
@@ -432,7 +449,10 @@ function heroObject() {
         }
 
         if (isTeleport) {
+            teleportContext.fillStyle = 'rgba(255,255,255,' + teleportEndTick / teleportEndTickMax + ')';
+            teleportContext.fillRect(0, 0, gameW, gameH);
             if (teleportEndTick >= teleportEndTickMax) {
+                teleportContext.restore();
                 isCountdown = !isCountdown;
                 isPeopleMap = !isPeopleMap;
                 isTeleport = !isTeleport;
