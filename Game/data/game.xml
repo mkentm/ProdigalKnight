@@ -23,12 +23,12 @@
 	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
 		<!--People-->
 		<GridRow id="people">11005001111050111111000P2</GridRow>
-		<GridRow id="people">1151110140101010050101111</GridRow>
+		<GridRow id="people">1151110160101010050101111</GridRow>
 		<GridRow id="people">6001110110051000110150001</GridRow>
 		<GridRow id="people">1111110011101111110001151</GridRow>
 		<GridRow id="people">1150011500501700010101101</GridRow>
 		<GridRow id="people">1101001111101011050101141</GridRow>
-		<GridRow id="people">4001100500501001111150111</GridRow>
+		<GridRow id="people">7001100500501001111150111</GridRow>
 		<GridRow id="people">1111111111011000050110006</GridRow>
 		<GridRow id="people">0501105001010011110011101</GridRow>
 		<GridRow id="people">1101101100010110411001101</GridRow>
@@ -38,7 +38,7 @@
 		<GridRow id="people">1100110511001011110151105</GridRow>
 		<GridRow id="people">1101110111011600110100110</GridRow>
 		<GridRow id="people">1101110111011115000110010</GridRow>
-		<GridRow id="people">0500417050005011111111015</GridRow>
+		<GridRow id="people">0500617050005011111111015</GridRow>
 		<GridRow id="people">1111111111111000500005010</GridRow>
 		<GridRow id="people">1100011700011311111111110</GridRow>
 		<GridRow id="people">2051050011005011114060500</GridRow>

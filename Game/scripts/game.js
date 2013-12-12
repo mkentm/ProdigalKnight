@@ -49,9 +49,16 @@ var abilityToMove;
 var fps = 30;
 var timerRatio = 1000 / fps;
 var animationSpeed = 300;
+var mana;
+var manaToOpenDoor;
 
 var dt;
 var oldTime;
+
+// user interface
+var ui = {};
+var goalPulseAngle = 0;
+var score = 0;
 
 /*===================================================================================================================*/
 /*Загрузка */
@@ -125,6 +132,9 @@ function initData() {
     isCountdown = false;
     isTeleport = false;
     abilityToMove = true;
+
+    mana = 0;
+    manaToOpenDoor = 3;
 
     // delta
     dt = 0;
@@ -442,7 +452,6 @@ function heroObject() {
     this.whichSprite = 0;
     // На сколько пикселей мы хотим переместить героя каждый цикл
     this.moveSpeed = 4;
-    this.mana = 0;
 
     this.render = function () {
         playerContext.drawImage(this.image, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
@@ -558,7 +567,7 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
     }
 
     for (iter in teleport) {
-        if (player.mana >= 3) {
+        if (mana >= manaToOpenDoor) {
             if (this.checkBonus(player, teleport[iter])) {
                 abilityToMove = false;
                 isTeleport = true;
@@ -578,13 +587,23 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
             context.drawImage(mechanical[iter].image1, 0, 0, mechanical[iter].imageSizeWidth1, mechanical[iter].imageSizeHeight1,
                 mechanical[iter].x, mechanical[iter].y, mechanical[iter].width, mechanical[iter].height);
             delete mechanical[iter];
-            player.mana += 1;
+            mana++;
         }
     }
 
     for (iter in bonuses) {
         if (this.checkCollision(player, bonuses[iter])) {
             context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
+            if(bonuses[iter].id == 5){
+                score += 500;
+            }else if(bonuses[iter].id == 6){
+                score += 1000;
+            }else if(bonuses[iter].id == 7){
+                score += 2500;
+            }else{
+                score += 100;
+            }
+
             delete bonuses[iter];
             break;
         }
@@ -615,7 +634,7 @@ function port(player) {
                 peopleContext.drawImage(teleportPeople[iter].image1, 0, 0, teleportPeople[iter].imageSizeWidth1, teleportPeople[iter].imageSizeHeight1,
                     teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
                 delete teleportPeople[iter];
-                player.mana -= 3;
+                mana -= manaToOpenDoor;
                 drawReview(player, true);
             }
         }
@@ -641,5 +660,56 @@ function gameLoop() {
     playerContext.clearRect(fog.x + 1, fog.y + 1, fog.width - 2, fog.height - 2);
     hero.render();
     fog.render();
+    // user interface
+    updateManaBar();
+    updateUI();
+    renderUI();
     lastUpdate = now;
+}
+
+function updateUI() {
+    ui.ratioComplete = mana+'/'+manaToOpenDoor;
+    ui.percentComplete = Math.round((mana / manaToOpenDoor) * 100);
+}
+
+function updateManaBar() {
+    if(goalPulseAngle < 360){
+        goalPulseAngle += 2 * (mana/manaToOpenDoor) * dt;
+    } else {
+        goalPulseAngle = 0;
+    }
+}
+
+function renderUI() {
+    // render top left text
+    // mana
+    playerContext.fillStyle = '#aaa';
+    playerContext.textAlign = 'left';
+    playerContext.font = 'bold 14px arial';
+    playerContext.fillText('Mana completion: '+ui.ratioComplete+' ('+ui.percentComplete+'%)', 12, 20);
+
+    // render top right text
+    // score
+    playerContext.fillStyle = '#aaa';
+    playerContext.textAlign = 'right';
+    playerContext.font = 'bold 14px arial';
+    playerContext.fillText('Score', (gameW-12), 20);
+
+    playerContext.fillStyle = '#fff';
+    playerContext.font = 'bold 16px arial';
+    playerContext.fillText(score.toString(), (gameW-12), 37);
+
+    // render mana bar
+    playerContext.fillStyle = '#222';
+    playerContext.fillRect(12, 30, 190, 10);
+    playerContext.fillStyle = 'hsl(210, 50%, '+(40+((Math.abs(180-goalPulseAngle))/180)*30)+'%)';
+    playerContext.fillRect(12, 30, (mana/manaToOpenDoor)*190, 10);
+    // bar highlight
+    var grad = playerContext.createLinearGradient(12, 30, 12, 34);
+    grad.addColorStop(0, 'rgba(255,255,255,0)');
+    grad.addColorStop(1, 'rgba(255,255,255,.2)');
+    playerContext.fillStyle = grad;
+    playerContext.fillRect(12, 30, 190, 5);
+
+    playerContext.fillStyle = "#0d0d0d";
 }
