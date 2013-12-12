@@ -23,12 +23,12 @@
 	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
 		<!--People-->
 		<GridRow id="people">11005001111050111111000P2</GridRow>
-		<GridRow id="people">1151110170101010050101111</GridRow>
+		<GridRow id="people">1151110140101010050101111</GridRow>
 		<GridRow id="people">6001110110051000110150001</GridRow>
 		<GridRow id="people">1111110011101111110001151</GridRow>
 		<GridRow id="people">1150011500501700010101101</GridRow>
-		<GridRow id="people">1101001111101011050101151</GridRow>
-		<GridRow id="people">7001100500501001111150111</GridRow>
+		<GridRow id="people">1101001111101011050101141</GridRow>
+		<GridRow id="people">4001100500501001111150111</GridRow>
 		<GridRow id="people">1111111111011000050110006</GridRow>
 		<GridRow id="people">0501105001010011110011101</GridRow>
 		<GridRow id="people">1101101100010110411001101</GridRow>
@@ -64,4 +64,8 @@
 		<GridRow id="spirit">1000015551110001510111111</GridRow>
 		<GridRow id="spirit">1111115551110001500111111</GridRow>
 	</Grid>
+	<Reviews>
+		<Visibility id="0" type="people" src="images/VISIBILITY_PEOPLE.png" width="160" height="160"/>
+		<Visibility id="1" type="spirit" src="images/VISIBILITY_SPIRIT.png" width="192" height="192"/>
+	</Reviews>
 </GameData>
