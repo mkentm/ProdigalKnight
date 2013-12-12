@@ -3,6 +3,8 @@ var playerContext;
 var mapCanvas;
 var mapContext;
 
+var mapW;
+var mapH;
 var gameW;
 var gameH;
 var gameBackground;
@@ -23,7 +25,7 @@ var timerRatio = 1000 / fps;
 /*Загрузка */
 /*===================================================================================================================*/
 $(document).ready(function () {
-    $.get("data/game.xml", processLoadGameData);
+    $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
 });
 
 $(document).keydown(function (event) {
@@ -64,29 +66,29 @@ function initGame() {
 }
 
 function initGameBoard() {
-    var curItem;
-    var iter = savedData.evaluate("GameData/Objects/Object", savedData, null, XPathResult.ANY_TYPE, null);
     gameObjects = [];
-    for (var i = 0; ; i++) {
-        curItem = (iter.length != null ? iter[i] : iter.iterateNext());
-        if (!curItem) {
-            break;
-        } else {
-            var index = curItem.attributes.getNamedItem("id").value;
+    jQuery(savedData).find("Object").each(
+        function () {
+            var index = jQuery(this).attr("id");
             gameObjects[index] = new gameObject();
-            gameObjects[index].width = parseInt(curItem.attributes.getNamedItem("width").value);
-            gameObjects[index].height = parseInt(curItem.attributes.getNamedItem("height").value);
-            gameObjects[index].imageSrc = curItem.attributes.getNamedItem("src").value;
-            gameObjects[index].type = curItem.attributes.getNamedItem("type").value;
+            gameObjects[index].id = index;
+            gameObjects[index].width = parseInt(jQuery(this).attr("width"));
+            gameObjects[index].height = parseInt(jQuery(this).attr("height"));
+            gameObjects[index].imageSrc = jQuery(this).attr("src");
+            gameObjects[index].type = jQuery(this).attr("type");
         }
-    }
+    );
 
-    iter = savedData.evaluate("GameData/Grid", savedData, null, XPathResult.ANY_TYPE, null);
-    curItem = (iter.length != null ? iter[0] : iter.iterateNext());
-    tileSize = parseInt(curItem.attributes.getNamedItem("tileSize").value);
-    gameW = parseInt(curItem.attributes.getNamedItem("width").value) * tileSize;
-    gameH = parseInt(curItem.attributes.getNamedItem("height").value) * tileSize;
-    gameBackground = curItem.attributes.getNamedItem("background").value;
+    jQuery(savedData).find("Grid").each(
+        function () {
+            tileSize = parseInt(jQuery(this).attr("tileSize"));
+            mapW = parseInt(jQuery(this).attr("width"));
+            mapH = parseInt(jQuery(this).attr("height"));
+            gameW = mapW * tileSize;
+            gameH = mapH * tileSize;
+            gameBackground = jQuery(this).attr("background");
+        }
+    );
 }
 
 function gameObject() {
@@ -113,70 +115,44 @@ function initCanvas() {
 
     playerCanvas = document.getElementById("playerCanvas");
     playerContext = playerCanvas.getContext("2d");
-    playerCanvas.width = 800;
+    playerCanvas.width = gameW;
     playerCanvas.height = gameH;
 }
 
 function initGameTiles() {
-    var iter = savedData.evaluate("GameData/Grid/GridRow", savedData, null, XPathResult.ANY_TYPE, null);
-
-    var curItem;
-    var collidableCount = 0;
+    var collidablesCount = 0;
     var sceneryCount = 0;
     var bonusesCount = 0;
 
-    for (var i = 0; ; i++) {
-        curItem = (iter.length != null ? iter[i] : iter.iterateNext());
-        if (!curItem) {
-            break;
-        } else {
-            var curRow = curItem.textContent;
-            if (curRow === undefined)
-                curRow = curItem.text;
+    var i = 0;
+    jQuery(savedData).find("GridRow").each(
+        function () {
+            var text = jQuery(this).text();
 
-            for (var j = 0; j < curRow.length; j++) {
-                var objIndex = curRow[j];
+            if (i >= mapH) {
+                i -= mapH;
+            }
+
+//            console.log("text = " + text);
+
+            for (var j = 0; j < text.length; j++) {
+                var objIndex = text[j];
+//                console.log("index = " + objIndex);
+//                console.log("gameObjects = ", gameObjects[objIndex]);
+                if (gameObjects[objIndex].type == "nothing") {
+
+                }
                 if (gameObjects[objIndex].type == "collidable") {
-                    collidables[collidableCount] = new drawImage();
-                    collidables[collidableCount].width = gameObjects[objIndex].width;
-                    collidables[collidableCount].height = gameObjects[objIndex].height;
-                    collidables[collidableCount].x = j * tileSize;
-                    collidables[collidableCount].y = i * tileSize;
-                    collidables[collidableCount].image = new Image();
-                    collidables[collidableCount].image.src = gameObjects[objIndex].imageSrc;
-                    collidables[collidableCount].image.index = collidableCount;
-                    $(collidables[collidableCount].image).load(function () {
-                        collidables[this.index].render();
-                    });
-                    collidableCount++;
+                    drawImageObjects(collidables, collidablesCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
+                    collidablesCount++;
                 }
                 if (gameObjects[objIndex].type == "scenery") {
-                    scenery[sceneryCount] = new drawImage();
-                    scenery[sceneryCount].width = gameObjects[objIndex].width;
-                    scenery[sceneryCount].height = gameObjects[objIndex].height;
-                    scenery[sceneryCount].x = j * tileSize;
-                    scenery[sceneryCount].y = i * tileSize;
-                    scenery[sceneryCount].image = new Image();
-                    scenery[sceneryCount].image.src = gameObjects[objIndex].imageSrc;
-                    scenery[sceneryCount].image.index = sceneryCount;
-                    $(scenery[sceneryCount].image).load(function () {
-                        scenery[this.index].render();
-                    });
+                    drawImageObjects(scenery, sceneryCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
                     sceneryCount++;
                 }
+
                 if (gameObjects[objIndex].type == "bonus") {
-                    bonuses[bonusesCount] = new drawImage();
-                    bonuses[bonusesCount].width = gameObjects[objIndex].width;
-                    bonuses[bonusesCount].height = gameObjects[objIndex].height;
-                    bonuses[bonusesCount].x = j * tileSize;
-                    bonuses[bonusesCount].y = i * tileSize;
-                    bonuses[bonusesCount].image = new Image();
-                    bonuses[bonusesCount].image.src = gameObjects[objIndex].imageSrc;
-                    bonuses[bonusesCount].render();
-//                    bonuses[bonusesCount].image.index = bonusesCount;
-//                    $(bonuses[bonusesCount].image).load(function () {
-//                        bonuses[this.index].render();
-//                    });
+                    drawImageObjects(bonuses, bonusesCount, gameObjects[objIndex], j * tileSize, i * tileSize, tileSize, tileSize);
                     bonusesCount++;
                 }
                 if (gameObjects[objIndex].type == "player") {
@@ -192,20 +168,39 @@ function initGameTiles() {
                     };
                 }
             }
+            i++;
         }
-    }
+    );
 }
 
 function drawImage() {
     this.width = 32;
     this.height = 32;
+    this.imageSizeWidth = 32;
+    this.imageSizeHeight = 32;
     this.x = null;
     this.y = null;
     this.image = null;
     this.render = function () {
-        mapContext.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
+        mapContext.drawImage(this.image, 0, 0, this.imageSizeWidth, this.imageSizeHeight, this.x, this.y, this.width, this.height);
     };
-};
+}
+
+function drawImageObjects(objects, objIndex, gameObject, x, y, tileSizeW, tileSizeH) {
+    objects[objIndex] = new drawImage();
+    objects[objIndex].imageSizeWidth = gameObject.width;
+    objects[objIndex].imageSizeHeight = gameObject.height;
+    objects[objIndex].width = tileSizeW;
+    objects[objIndex].height = tileSizeH;
+    objects[objIndex].x = x;
+    objects[objIndex].y = y;
+    objects[objIndex].image = new Image();
+    objects[objIndex].image.src = gameObject.imageSrc;
+    objects[objIndex].image.index = objIndex;
+    $(objects[objIndex].image).load(function () {
+        objects[this.index].render();
+    });
+}
 
 function heroObject() {
     this.imageWidth = 32;
