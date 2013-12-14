@@ -28,6 +28,7 @@ var ProdigalKnight = function () {
     var levelButtons = doc.querySelectorAll('.level');
     var returnFromLevelsToMainButton = get('returnFromLevelsToMainBtn');
     // - main - levels - misc
+    var levelScores = doc.querySelectorAll('.levelScore');
     var completedLevelsDisplay = get('completedLevels');
     // - main - overallStats
     var returnFromStatsToMainButton = get('returnFromStatsToMainBtn');
@@ -38,6 +39,7 @@ var ProdigalKnight = function () {
     dom.buttonAudioTrue = $('#audioTrue');
     dom.buttonAudioFalse = $('#audioFalse');
     var settings = {};
+    var user;
 
     /*============================================================================================*/
     /* Initialize Game */
@@ -47,8 +49,7 @@ var ProdigalKnight = function () {
             music: false,
             sound: false
         };
-        // set completed levels display
-        completedLevelsDisplay.innerHTML = 0;
+        setupUser();
         bindMenuEvents();
         animationSpeed = 300;
     };
@@ -58,6 +59,49 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     function get(a) {
         return doc.getElementById(a);
+    }
+
+    // class helpers - source: http://rockycode.com/blog/addremove-classes-raw-javascript/
+    function hasClass(ele, cls) {
+        return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    }
+
+    function addClass(ele, cls) {
+        if (!hasClass(ele, cls)) ele.className += " " + cls;
+    }
+
+    function rmvClass(ele, cls) {
+        if (hasClass(ele, cls)) {
+            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+            ele.className = ele.className.replace(reg, ' ');
+        }
+    }
+
+    // local storage helpers - source: http://stackoverflow.com/questions/2010892/storing-objects-in-html5-localstorage/3146971#3146971
+    Storage.prototype.setObject = function (key, value) {
+        this.setItem(key, JSON.stringify(value));
+    };
+
+    Storage.prototype.getObject = function (key) {
+        var value = this.getItem(key);
+        return value && JSON.parse(value);
+    };
+
+    Storage.prototype.removeObject = function (key) {
+        this.removeItem(key);
+    };
+
+    // add commas to large numbers - source: http://stackoverflow.com/questions/6392102/add-commas-to-javascript-output
+    function commas(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
     }
 
     /*============================================================================================*/
@@ -136,11 +180,60 @@ var ProdigalKnight = function () {
 
     function startLevel(e) {
         e.preventDefault();
-        hideWindows();
-        $(gameWindow).stop().fadeTo(animationSpeed, 1);
-        var script = document.createElement("script");
-        script.src = "scripts/game.js";
-        script.type = "text/javascript";
-        document.getElementsByTagName("head")[0].appendChild(script);
+        console.log("![" + parseInt(this.getAttribute('rel'), 10) + "]");
+        if (!hasClass(this, 'disabled')) {
+            hideWindows();
+            $(gameWindow).stop().fadeTo(animationSpeed, 1);
+            var script = document.createElement("script");
+            script.src = "scripts/game.js";
+            script.type = "text/javascript";
+            document.getElementsByTagName("head")[0].appendChild(script);
+        }
+    }
+
+    /*============================================================================================*/
+    /* User */
+    /*============================================================================================*/
+    function setupUser () {
+        user = localStorage.getObject('prodigalKnightUser') || {
+            highestLevelBeaten: 0,
+            levels: [
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0},
+                {score: 0}
+            ],
+
+            overall: {
+                score: 0,
+                levelsPlayed: 0,
+                timePlayed: 0
+            }
+        };
+        syncDOM();
+    }
+
+    /*============================================================================================*/
+    /* Sync Level to user object */
+    /*============================================================================================*/
+    function syncDOM () {
+        // levels
+        var i = levelButtons.length;
+        while (i--) {
+            if (i > user.highestLevelBeaten) {
+                addClass(levelButtons[i], 'disabled');
+            } else {
+                rmvClass(levelButtons[i], 'disabled');
+            }
+            levelScores[i].innerHTML = (user.levels[i].score == 0) ? '&#8709;' : commas(user.levels[i].score);
+        }
+        // set completed levels display
+        completedLevelsDisplay.innerHTML = user.highestLevelBeaten;
     }
 }; // end game
