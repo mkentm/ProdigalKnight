@@ -20,6 +20,10 @@ var ProdigalKnight = function () {
     var levelsWindow = get('levels');
     var overallStatsWindow = get('overall-stats');
     var gameWindow = get('game');
+    // overall stats content
+    var overallStatsScore = get('overallScore');
+    var overallStatsLevelsPlayed = get('overallLevelsPlayed');
+    var overallStatsTimePlayed = get('overallTimePlayed');
     // button content
     // - main
     var playGameButton = get('playGameBtn');
@@ -169,6 +173,14 @@ var ProdigalKnight = function () {
     function overallStats(e) {
         e.preventDefault();
         hideWindows();
+        var milliseconds = user.overall.timePlayed;
+        var minutes = Math.floor(milliseconds / 1000 / 60);
+        var seconds = Math.floor(milliseconds / 1000) % 60;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+        overallStatsScore.innerHTML = commas(user.overall.score);
+        overallStatsLevelsPlayed.innerHTML = commas(user.overall.levelsPlayed);
+        overallStatsTimePlayed.innerHTML = minutes + ':' + seconds + ' <em class="td-note">(minutes:seconds)</em>';
+
         $(overallStatsWindow).stop().fadeTo(animationSpeed, 1);
     }
 
@@ -183,6 +195,10 @@ var ProdigalKnight = function () {
         console.log("![" + parseInt(this.getAttribute('rel'), 10) + "]");
         if (!hasClass(this, 'disabled')) {
             hideWindows();
+
+//            var levelNumber = parseInt(this.getAttribute('rel'), 10);
+//            initLevel(levelNumber);
+
             $(gameWindow).stop().fadeTo(animationSpeed, 1);
             var script = document.createElement("script");
             script.src = "scripts/game.js";
@@ -219,6 +235,11 @@ var ProdigalKnight = function () {
         syncDOM();
     }
 
+    function updateUser () {
+        localStorage.setObject('prodigalKnightUser', user);
+        syncDOM();
+    }
+
     /*============================================================================================*/
     /* Sync Level to user object */
     /*============================================================================================*/
@@ -235,5 +256,23 @@ var ProdigalKnight = function () {
         }
         // set completed levels display
         completedLevelsDisplay.innerHTML = user.highestLevelBeaten;
+    }
+
+    /*============================================================================================*/
+    /* Initialize Level */
+    /*============================================================================================*/
+    function initLevel (level){
+        user.levels[level].score = Math.round(Date.now());
+        if (level >= user.highestLevelBeaten) {
+            user.highestLevelBeaten = level + 1;
+        }
+
+        user.overall.score = 0;
+        for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
+            user.overall.score += user.levels[levelIndex].score;
+        }
+
+        user.overall.levelsPlayed += 1;
+        updateUser();
     }
 }; // end game
