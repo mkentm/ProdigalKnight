@@ -75,6 +75,10 @@ a:focus {
     display: none;
 }
 
+#overall-stats {
+    display: none;
+}
+
 #game {
     display: none;
 }
@@ -220,4 +224,32 @@ p {
     color: #cccccc;
     font-size: 14px;
     margin: 0 0 20px;
+}
+
+/*============================================================================================*/
+/*Статистика */
+/*============================================================================================*/
+table {
+    border-collapse: separate;
+    border-spacing: 1px;
+    margin: 0 auto 20px;
+    width: 348px;
+}
+
+th {
+    background: rgba(41, 41, 41, .75);
+    padding: 6px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+td {
+    background: rgba(41, 41, 41, .5);
+    padding: 6px 16px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    width: 50%;
 }

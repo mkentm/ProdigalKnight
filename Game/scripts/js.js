@@ -17,10 +17,14 @@ var ProdigalKnight = function () {
     // window content
     var mainWindow = get('main');
     var windows = doc.querySelectorAll('.window');
+    var overallStatsWindow = get('overall-stats');
     var gameWindow = get('game');
     // button content
     // - main
     var playGameButton = get('playGameBtn');
+    var overallStatsButton = get('overallStatsBtn');
+    // - main - overallStats
+    var returnFromStatsToMainButton = get('returnFromStatsToMainBtn');
     // DOM Object
     var dom ={};
     dom.menuAudio = $('#audio-select');
@@ -56,6 +60,8 @@ var ProdigalKnight = function () {
     // bind button events
     function bindMenuEvents () {
         playGameButton.addEventListener('click', playGame, false);
+        overallStatsButton.addEventListener('click', overallStats, false);
+        returnFromStatsToMainButton.addEventListener('click', returnToMain, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -82,5 +88,17 @@ var ProdigalKnight = function () {
         script.src = "scripts/game.js";
         script.type="text/javascript";
         document.getElementsByTagName("head")[0].appendChild(script);
+    }
+
+    function overallStats (e) {
+        e.preventDefault();
+        hideWindows();
+        $(overallStatsWindow).stop().fadeTo(animationSpeed, 1);
+    }
+
+    function returnToMain (e) {
+        e.preventDefault();
+        hideWindows();
+        $(mainWindow).stop().fadeTo(animationSpeed, 1);
     }
 }; // end game

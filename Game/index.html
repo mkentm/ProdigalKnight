@@ -32,6 +32,27 @@
             <a href="#" class="button" id="overallStatsBtn"><span>Общая статистика</span></a>
             <a href="#" class="button" id="resetGameDataBtn"><span>Сброс данных игры</span></a>
         </div>
+        <div id="overall-stats" class="window">
+            <div class="center"></div>
+            <table>
+                <tr>
+                    <th colspan="2">Общая статистика</th>
+                </tr>
+                <tr>
+                    <td>Общий счет:</td>
+                    <td id="overallScore"></td>
+                </tr>
+                <tr>
+                    <td>Пройдено уровней:</td>
+                    <td id="overallLevelsPlayed"></td>
+                </tr>
+                <tr>
+                    <td>Общее время игры:</td>
+                    <td id="overallTimePlayed"></td>
+                </tr>
+            </table>
+            <a href="#" class="button" id="returnFromStatsToMainBtn"><span>Вернуться на главную</span></a>
+        </div>
         <div id="game" class="window">
             <canvas class="map" id="peopleCanvas"></canvas>
             <canvas class="map" id="spiritCanvas"></canvas>
