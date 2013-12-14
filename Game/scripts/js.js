@@ -1,22 +1,32 @@
 $(window).load(function () {
-    $(this).remove();
-    $('#menu-bar').stop().fadeTo(0, 1);
-    $('#main').stop().fadeTo(0, 1);
-    var pk = new ProdigalKnight();
-    pk.initGame();
+    $('#loading').fadeTo(800, 0, function () {
+        $(this).remove();
+        setTimeout(function () {
+            $('#cover').fadeTo(800, 0, function () {
+                $(this).remove();
+            });
+            var pk = new ProdigalKnight();
+            pk.initGame();
+        }, 1000);
+    });
 });
 
 var ProdigalKnight = function () {
     var doc = document;
     var animationSpeed = 0;
-
     // window content
+    var mainWindow = get('main');
     var windows = doc.querySelectorAll('.window');
     var gameWindow = get('game');
-
     // button content
     // - main
     var playGameButton = get('playGameBtn');
+    // DOM Object
+    var dom ={};
+    dom.menuAudio = $('#audio-select');
+    dom.menuBar = $('#menu-bar');
+    dom.buttonAudioTrue = $('#audioTrue');
+    dom.buttonAudioFalse = $('#audioFalse');
 
     /*============================================================================================*/
     /* Initialize Game */
@@ -46,6 +56,22 @@ var ProdigalKnight = function () {
     // bind button events
     function bindMenuEvents () {
         playGameButton.addEventListener('click', playGame, false);
+
+        dom.buttonAudioTrue.click('click', function (e) {
+            e.preventDefault();
+            hideWindows();
+            dom.menuBar.stop().fadeTo(animationSpeed, 1);
+            $(mainWindow).stop().fadeTo(animationSpeed, 1);
+        });
+
+        dom.buttonAudioFalse.click('click', function (e) {
+            e.preventDefault();
+            $('#toggleMusic').addClass('off');
+            $('#toggleSound').addClass('off');
+            hideWindows();
+            dom.menuBar.stop().fadeTo(animationSpeed, 1);
+            $(mainWindow).stop().fadeTo(animationSpeed, 1);
+        });
     }
 
     function playGame (e) {
