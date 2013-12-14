@@ -1,5 +1,7 @@
 $(window).load(function () {
     $(this).remove();
+    $('#menu-bar').stop().fadeTo(0, 1);
+    $('#main').stop().fadeTo(0, 1);
     var pk = new ProdigalKnight();
     pk.initGame();
 });
@@ -28,6 +30,7 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     // window content
     self.gameWrap = self.get('game-wrap');
+    self.menuBar = self.get('menu-bar');
     self.windows = doc.querySelectorAll('.window');
     self.mainWindow = self.get('main');
     self.gameWindow = self.get('game');
