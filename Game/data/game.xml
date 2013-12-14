@@ -5,18 +5,18 @@
 		<ObjectPeople id="0" type="nothing" src="images/ROAD_SAND_TILE.png" width="32" height="32"/>
 		<ObjectPeople id="1" type="collidable" src="images/WALL_BRICK.png" width="32" height="32"/>
 		<ObjectPeople id="2" type="scenery" src="images/DECORATE_DOOR.png" width="32" height="32"/>
-		<ObjectPeople id="3" type="teleport" src="images/MAGICAL_DOOR_CLOSE.png" width="32" height="32"
-		              src1="images/MAGICAL_DOOR_OPEN.png" width1="32" height1="32"/>
-		<ObjectPeople id="4" type="mechanical" src="images/MANA_FULL.png" width="32" height="32"
-		              src1="images/MANA_EMPTY.png" width1="32" height1="32"/>
+		<ObjectPeople id="3" type="teleport" src="images/MAGICAL_DOOR_CLOSE.png" width="256" height="256"
+		              src1="images/MAGICAL_DOOR_OPEN.png" width1="256" height1="256"/>
+		<ObjectPeople id="4" type="mechanical" src="images/MANA_FULL.png" width="256" height="256"
+		              src1="images/MANA_EMPTY.png" width1="256" height1="256"/>
 		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
 		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
 		<ObjectPeople id="7" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
 		<ObjectPeople id="P" type="player" src="images/SPIRIT_PEOPLE.png" width="32" height="32"/>
 		<!--Spirit-->
-		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.png" width="32" height="32"/>
-		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.png" width="32" height="32"/>
-		<ObjectSpirit id="3" type="teleport" src="images/PORTAL_FROZEN.png" width="32" height="32"/>
+		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.jpg" width="256" height="256"/>
+		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.jpg" width="256" height="256"/>
+		<ObjectSpirit id="3" type="teleport" src="images/PORTAL_FROZEN.png" width="256" height="256"/>
 		<ObjectSpirit id="5" type="bonus" src="images/BONUS_MINERAL.png" width="32" height="32"/>
 		<!--Player-->
 	</Objects>
