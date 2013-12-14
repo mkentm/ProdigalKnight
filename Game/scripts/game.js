@@ -686,30 +686,30 @@ function renderUI() {
     playerContext.fillStyle = '#aaa';
     playerContext.textAlign = 'left';
     playerContext.font = 'bold 14px arial';
-    playerContext.fillText('Mana completion: '+ui.ratioComplete+' ('+ui.percentComplete+'%)', 12, 20);
+    playerContext.fillText('Mana completion: '+ui.ratioComplete+' ('+ui.percentComplete+'%)', 180, 15);
 
     // render top right text
     // score
     playerContext.fillStyle = '#aaa';
     playerContext.textAlign = 'right';
     playerContext.font = 'bold 14px arial';
-    playerContext.fillText('Score', (gameW-12), 20);
+    playerContext.fillText('Score', (gameW-180), 15);
 
     playerContext.fillStyle = '#fff';
     playerContext.font = 'bold 16px arial';
-    playerContext.fillText(score.toString(), (gameW-12), 37);
+    playerContext.fillText(score.toString(), (gameW-180), 32);
 
     // render mana bar
-    playerContext.fillStyle = '#222';
-    playerContext.fillRect(12, 30, 190, 10);
-    playerContext.fillStyle = 'hsl(210, 50%, '+(40+((Math.abs(180-goalPulseAngle))/180)*30)+'%)';
-    playerContext.fillRect(12, 30, (mana/manaToOpenDoor)*190, 10);
+    playerContext.fillStyle = 'rgba(34, 34, 34, .2)';//'#222';
+    playerContext.fillRect(180, 25, 190, 10);
+    playerContext.fillStyle = 'hsla(210, 50%, '+(40+((Math.abs(180-goalPulseAngle))/180)*30)+'%, 0.8)';
+    playerContext.fillRect(180, 25, (mana/manaToOpenDoor)*190, 10);
     // bar highlight
-    var grad = playerContext.createLinearGradient(12, 30, 12, 34);
-    grad.addColorStop(0, 'rgba(255,255,255,0)');
-    grad.addColorStop(1, 'rgba(255,255,255,.2)');
+    var grad = playerContext.createLinearGradient(180, 25, 180, 29);
+    grad.addColorStop(0, 'rgba(255,255,255, 0)');
+    grad.addColorStop(1, 'rgba(255,255,255, .15)');
     playerContext.fillStyle = grad;
-    playerContext.fillRect(12, 30, 190, 5);
+    playerContext.fillRect(180, 25, 190, 5);
 
     playerContext.fillStyle = "#0d0d0d";
 }
