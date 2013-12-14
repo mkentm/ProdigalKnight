@@ -9,60 +9,13 @@
 </head>
 <body>
     <div id="game-wrap">
-        <div id="main" class="menu">
-            <h1><strong>Блудный рыцарь</strong></h1>
-            <p class="desc">Созданный группой ПОСс-09Б</p>
-            <p class="desc">
-                <a href="http://vk.com/id18116018" target="_blank">Елена Митько</a>,
-                <a href="http://vk.com/angel_32548501" target="_blank">Александр Фильчак</a>,
-                <a href="http://vk.com/kentangl" target="_blank">Роман Туаев</a>,
-                <a href="http://vk.com/maxim_lebedev_ua" target="_blank">Максим Лебедев</a>,
-                <a href="http://vk.com/id143661554" target="_blank">Николай Москвичев</a>
-            </p>
-
-            <div id="no-can">
-                <div class="divider"></div>
-                <p>Ваш браузер не поддерживает canvas. Чтобы играть в игру, скачайте последнюю версию браузера, которая поддерживает canvas, такие как
-                    <a href="https://google.com/chrome" target="_blank"> Google Chrome</a>,
-                    <a href="http://mozilla.org/firefox" target="_blank"> Mozilla Firefox</a> или
-                    <a href="http://www.opera.com" target="_blank"> Opera</a>.
-                </p>
-            </div><!--end #no-can-->
-
-            <div id="home-wrap">
-                <div class="divider"></div>
-                <h3>Обзор</h3>
-                <div id="guide" class="clearfix">
-                    <ul>
-                        <li>
-                            <strong>Цель</strong> - Вывести рыцаря из лабиринта. Чтобы выйти из лабиринта, необходимо найти дверь и ключи для ее открытия. Время для поисков ограничены. Собирайте бонусы, чтобы получить преимущества:
-                            <span class="pwrup1">Часы<i class="tip"><img src="images/time.png"><br>Добавляется определенное количество времени к таймеру</i></span>,
-                            <span class="pwrup2">Факел<i class="tip"><img src="images/torch.png"><br>Освещает часть лабиринта</i></span>, и
-                            <span class="pwrup3">Монета<i class="tip"><img src="images/BONUS_COIN.png"><br>Монеты для приобретения обновления</i></span>.
-                        </li>
-                        <li>
-                            <strong>Управление</strong> - <img src="images/key_left.png">
-                            <img src="images/key_up.png"> <img src="images/key_down.png">
-                            <img src="images/key_right.png"> чтобы двигаться.
-                            <img src="images/key_space.png"> чтобы поставить/забрать факел.
-                            <img src="images/key_esc.png"> чтобы приостановить.
-                        </li>
-                        <li>
-                            <strong>Сохранение</strong> - Данные игры сохраняются автоматически в конце уровня обновления и после покупки.
-                        </li>
-                        <li>
-                            <strong>Счет</strong> - Чем выше, тем лучше. Проходить уровни быстрее, и редко использовать факелы, чтобы получить более высокий балл.
-                        </li>
-                    </ul>
-                </div>
-                <div class="divider"></div>
-
-                <a href="#" class="button" id="playGameBtn"><span>Начать игру</span></a>
-                <a href="#" class="button" id="overallStatsBtn"><span>Общая статистика</span></a>
-                <a href="#" class="button" id="resetGameDataBtn"><span>Сброс данных игры</span></a>
-            </div><!-- end #home-wrap -->
-        </div><!--end #main-->
-        <div id="game" class="menu">
+        <div id="main" class="window">
+            <div class="center"></div>
+            <a href="#" class="button" id="playGameBtn"><span>Начать игру</span></a>
+            <a href="#" class="button" id="overallStatsBtn"><span>Общая статистика</span></a>
+            <a href="#" class="button" id="resetGameDataBtn"><span>Сброс данных игры</span></a>
+        </div>
+        <div id="game" class="window">
             <canvas class="map" id="peopleCanvas"></canvas>
             <canvas class="map" id="spiritCanvas"></canvas>
             <canvas id="playerCanvas"></canvas>

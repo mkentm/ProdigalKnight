@@ -1,4 +1,5 @@
 $(window).load(function () {
+    $(this).remove();
     var pk = new ProdigalKnight();
     pk.initGame();
 });
@@ -7,7 +8,9 @@ var ProdigalKnight = function () {
     var self = this;
     var doc = document;
 
-    // getElementById()
+    /*============================================================================================*/
+    /* Utility / Mathematical / Miscellaneous */
+    /*============================================================================================*/
     self.get = function (a) {
         return doc.getElementById(a);
     };
@@ -25,13 +28,15 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     // window content
     self.gameWrap = self.get('game-wrap');
+    self.windows = doc.querySelectorAll('.window');
     self.mainWindow = self.get('main');
-    self.windows = doc.querySelectorAll('.menu');
-
     self.gameWindow = self.get('game');
 
     // button content
+    // - main
     self.playGameButton = self.get('playGameBtn');
+    self.overallStatsButton = self.get('overallStatsBtn');
+    self.resetGameDataButton = self.get('resetGameDataBtn');
 
     // hide all windows
     self.hideWindows = function () {
