@@ -22,7 +22,7 @@
 	</Objects>
 	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
 		<!--People-->
-		<GridRow id="people">11005001111050111111000P2</GridRow>
+		<GridRow id="people">110050011110501111110000P</GridRow>
 		<GridRow id="people">1151110160101010050101111</GridRow>
 		<GridRow id="people">6001110110051000110150001</GridRow>
 		<GridRow id="people">1111110011101111110001151</GridRow>

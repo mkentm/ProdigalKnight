@@ -205,15 +205,9 @@ var ProdigalKnight = function () {
         console.log("![" + parseInt(this.getAttribute('rel'), 10) + "]");
         if (!hasClass(this, 'disabled')) {
             hideWindows();
-
-//            var levelNumber = parseInt(this.getAttribute('rel'), 10);
-//            initLevel(levelNumber);
-
+            var levelNumber = parseInt(this.getAttribute('rel'), 10);
+            initLevel(levelNumber);
             $(gameWindow).stop().fadeTo(animationSpeed, 1);
-            var script = document.createElement("script");
-            script.src = "scripts/game.js";
-            script.type = "text/javascript";
-            document.getElementsByTagName("head")[0].appendChild(script);
         }
     }
 
@@ -277,18 +271,18 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     /* Initialize Level */
     /*============================================================================================*/
-    function initLevel (level){
-        user.levels[level].score = Math.round(Date.now());
-        if (level >= user.highestLevelBeaten) {
-            user.highestLevelBeaten = level + 1;
-        }
-
-        user.overall.score = 0;
-        for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
-            user.overall.score += user.levels[levelIndex].score;
-        }
-
-        user.overall.levelsPlayed += 1;
-        updateUser();
-    }
+//    function initLevel (level){
+//        user.levels[level].score = Math.round(Date.now());
+//        if (level >= user.highestLevelBeaten) {
+//            user.highestLevelBeaten = level + 1;
+//        }
+//
+//        user.overall.score = 0;
+//        for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
+//            user.overall.score += user.levels[levelIndex].score;
+//        }
+//
+//        user.overall.levelsPlayed += 1;
+//        updateUser();
+//    }
 }; // end game

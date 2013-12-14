@@ -61,20 +61,8 @@ var goalPulseAngle = 0;
 var score = 0;
 
 /*===================================================================================================================*/
-/*Загрузка */
+/*Управление */
 /*===================================================================================================================*/
-$(document).ready(function () {
-    hideMaps();
-    idPeopleCanvas = get("peopleCanvas");
-    idSpiritCanvas = get("spiritCanvas");
-    idPlayerCanvas = get("playerCanvas");
-    idTeleportCanvas = get("teleportCanvas");
-//    $(idPlayerCanvas).hide();
-    $(idPeopleCanvas).stop().fadeTo(animationSpeed, 1, function () {
-        $.get("data/game.xml?ver=" + Date.now(), processLoadGameData);
-    });
-});
-
 $(document).keydown(function (event) {
     if (36 < event.keyCode && event.keyCode < 41) {
         if (hero != null) {
@@ -102,6 +90,26 @@ $(document).keyup(function (event) {
 /*===================================================================================================================*/
 /*Инициализация */
 /*===================================================================================================================*/
+var level;
+var levelPlaying;
+var menuMode;
+
+function initLevel(level) {
+    this.level = level;
+    levelPlaying = true;
+    menuMode = false;
+
+    hideMaps();
+    idPeopleCanvas = get("peopleCanvas");
+    idSpiritCanvas = get("spiritCanvas");
+    idPlayerCanvas = get("playerCanvas");
+    idTeleportCanvas = get("teleportCanvas");
+//    $(idPlayerCanvas).hide();
+    $(idPeopleCanvas).stop().fadeTo(animationSpeed, 1, function () {
+        $.get("data/level" + level + ".xml?ver=" + Date.now(), processLoadGameData);
+    });
+}
+
 function hideMaps() {
     $(document.querySelectorAll('.map')).fadeTo(animationSpeed, 0, function () {
         $(this).hide();
