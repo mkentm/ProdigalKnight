@@ -28,6 +28,7 @@ var ProdigalKnight = function () {
     // - main
     var playGameButton = get('playGameBtn');
     var overallStatsButton = get('overallStatsBtn');
+    var resetGameDataButton = get('resetGameDataBtn');
     // - main - levels
     var levelButtons = doc.querySelectorAll('.level');
     var returnFromLevelsToMainButton = get('returnFromLevelsToMainBtn');
@@ -124,6 +125,7 @@ var ProdigalKnight = function () {
         returnFromLevelsToMainButton.addEventListener('click', returnToMain, false);
         overallStatsButton.addEventListener('click', overallStats, false);
         returnFromStatsToMainButton.addEventListener('click', returnToMain, false);
+        resetGameDataButton.addEventListener('click', resetGameData, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -184,6 +186,14 @@ var ProdigalKnight = function () {
         $(overallStatsWindow).stop().fadeTo(animationSpeed, 1);
     }
 
+    function resetGameData (e) {
+        e.preventDefault();
+        var confirmation = confirm('Вы уверены, что хотите сбросить данные игры? Это не может быть отменено.');
+        if (confirmation) {
+            clearUser();
+        }
+    }
+
     function returnToMain(e) {
         e.preventDefault();
         hideWindows();
@@ -237,6 +247,12 @@ var ProdigalKnight = function () {
 
     function updateUser () {
         localStorage.setObject('prodigalKnightUser', user);
+        syncDOM();
+    }
+
+    function clearUser () {
+        localStorage.removeObject('prodigalKnightUser');
+        setupUser();
         syncDOM();
     }
 
