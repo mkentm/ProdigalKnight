@@ -37,11 +37,16 @@ var ProdigalKnight = function () {
     dom.menuBar = $('#menu-bar');
     dom.buttonAudioTrue = $('#audioTrue');
     dom.buttonAudioFalse = $('#audioFalse');
+    var settings = {};
 
     /*============================================================================================*/
     /* Initialize Game */
     /*============================================================================================*/
     this.initGame = function () {
+        settings = {
+            music: false,
+            sound: false
+        };
         // set completed levels display
         completedLevelsDisplay.innerHTML = 0;
         bindMenuEvents();
@@ -76,7 +81,11 @@ var ProdigalKnight = function () {
             e.preventDefault();
             hideWindows();
             dom.menuBar.stop().fadeTo(animationSpeed, 1);
-            $(mainWindow).stop().fadeTo(animationSpeed, 1);
+            $(mainWindow).stop().fadeTo(animationSpeed, 1, function () {
+                settings.music = true;
+                settings.sound = true;
+                $('#music')[0].play();
+            });
         });
 
         dom.buttonAudioFalse.click('click', function (e) {
@@ -93,6 +102,17 @@ var ProdigalKnight = function () {
         while (i--) {
             levelButtons[i].addEventListener('click', startLevel, false);
         }
+
+        $('#toggleMusic').click('click', function (e) {
+            e.preventDefault();
+            settings.music = !settings.music;
+            $(this).toggleClass('off');
+            if (settings.music) {
+                $('#music')[0].play();
+            } else {
+                $('#music')[0].pause();
+            }
+        });
     }
 
     function playGame(e) {
