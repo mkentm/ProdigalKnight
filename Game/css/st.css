@@ -31,7 +31,7 @@ a:focus {
 /*Структура */
 /*===============================================================================================*/
 #loading {
-    background: #000;
+    background: #000000 url(../images/LOADING.gif) no-repeat center;
     height: 100%;
     left: 0;
     position: absolute;
@@ -41,7 +41,7 @@ a:focus {
 }
 
 #cover {
-    background: #222;
+    background: url(../images/COVER.png);
     height: 100%;
     left: 0;
     position: absolute;
@@ -51,7 +51,7 @@ a:focus {
 }
 
 #game-wrap {
-    background: #000;
+    background: url(../images/MAIN.png);
     border: 2px solid #1d1d1d;
     height: 640px;
     width: 800px;
@@ -77,10 +77,12 @@ a:focus {
 
 #levels {
     display: none;
+    background: url(../images/LEVELS.png);
 }
 
 #overall-stats {
     display: none;
+    background: url(../images/OVERALL_STATS.png);
 }
 
 #game {
