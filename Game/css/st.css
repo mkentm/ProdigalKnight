@@ -85,6 +85,12 @@ a:focus {
     background: url(../images/OVERALL_STATS.png);
 }
 
+#pause {
+    display: none;
+    background: rgba(20, 20, 20, .5);
+    z-index: 10;
+}
+
 #game {
     display: none;
 }

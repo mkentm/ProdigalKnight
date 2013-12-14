@@ -37,6 +37,8 @@ var ProdigalKnight = function () {
     var completedLevelsDisplay = get('completedLevels');
     // - main - overallStats
     var returnFromStatsToMainButton = get('returnFromStatsToMainBtn');
+    // - pause
+    var resumeLevelButton = get('resumeLevelButton');
     // DOM Object
     var dom = {};
     dom.menuAudio = $('#audio-select');
@@ -126,6 +128,7 @@ var ProdigalKnight = function () {
         overallStatsButton.addEventListener('click', overallStats, false);
         returnFromStatsToMainButton.addEventListener('click', returnToMain, false);
         resetGameDataButton.addEventListener('click', resetGameData, false);
+        resumeLevelButton.addEventListener('click', pauseLevel, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -162,6 +165,11 @@ var ProdigalKnight = function () {
             } else {
                 $('#music')[0].pause();
             }
+        });
+
+        $('#togglePause').click('click', function(e){
+            e.preventDefault();
+            pauseLevel();
         });
     }
 
@@ -206,7 +214,7 @@ var ProdigalKnight = function () {
         if (!hasClass(this, 'disabled')) {
             hideWindows();
             var levelNumber = parseInt(this.getAttribute('rel'), 10);
-            initLevel(levelNumber);
+            initLevel(this, levelNumber);
             $(gameWindow).stop().fadeTo(animationSpeed, 1);
         }
     }

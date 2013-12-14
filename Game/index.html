@@ -9,97 +9,109 @@
     <script type="text/javascript" src="scripts/game.js"></script>
 </head>
 <body>
-    <audio src="audio/music.ogg" id="music" loop></audio>
-    <div id="game-wrap">
-        <div id="loading"></div>
-        <div id="cover"></div>
-        <div id="audio-select" class="window">
-            <div class="center"></div>
-            <div class="inner">
-                <h3>Выберите настройки звука</h3>
-                <a href="#" class="button" id="audioTrue"><span>Играть со звуком</span></a>
-                <a href="#" class="button" id="audioFalse"><span>Играть без звука</span></a>
-                <p>Позже можно изменить в настройках в левом верхнем углу.</p>
+<audio src="audio/music.ogg" id="music" loop></audio>
+<div id="game-wrap">
+    <div id="loading"></div>
+    <div id="cover"></div>
+    <div id="audio-select" class="window">
+        <div class="center"></div>
+        <div class="inner">
+            <h3>Выберите настройки звука</h3>
+            <a href="#" class="button" id="audioTrue"><span>Играть со звуком</span></a>
+            <a href="#" class="button" id="audioFalse"><span>Играть без звука</span></a>
+
+            <p>Позже можно изменить в настройках в левом верхнем углу.</p>
+        </div>
+    </div>
+    <div id="menu-bar">
+        <a href="#" id="toggleMusic">Музыка</a>
+        <a href="#" id="toggleSound">Звук</a>
+        <a href="#" id="togglePause">Пауза</a>
+        <a href="#" id="toggleHelp">Помощь</a>
+    </div>
+    <div id="main" class="window">
+        <div class="center"></div>
+        <a href="#" class="button" id="playGameBtn"><span>Начать игру</span></a>
+        <a href="#" class="button" id="overallStatsBtn"><span>Общая статистика</span></a>
+        <a href="#" class="button" id="resetGameDataBtn"><span>Сброс данных игры</span></a>
+    </div>
+    <div id="levels" class="window">
+        <h3>Уровни</h3>
+
+        <p>Пройдено: <strong><span id="completedLevels"></span>/10</strong></p>
+
+        <div class="levelList clearfix">
+            <div class="levelWrap">
+                <a href="#" rel="0" class="level btnLevel"><span>1<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="1" class="level btnLevel"><span>2<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="2" class="level btnLevel"><span>3<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="3" class="level btnLevel"><span>4<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="4" class="level btnLevel"><span>5<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="5" class="level btnLevel"><span>6<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="6" class="level btnLevel"><span>7<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="7" class="level btnLevel"><span>8<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="8" class="level btnLevel"><span>9<small class="levelScore"></small></span></a>
+            </div>
+            <div class="levelWrap">
+                <a href="#" rel="9" class="level btnLevel"><span>10<small class="levelScore"></small></span></a>
             </div>
         </div>
-        <div id="menu-bar">
-            <a href="#" id="toggleMusic">Музыка</a>
-            <a href="#" id="toggleSound">Звук</a>
-            <a href="#" id="togglePause">Пауза</a>
-            <a href="#" id="toggleHelp">Помощь</a>
+        <a href="#" class="button" id="returnFromLevelsToMainBtn"><span>Вернуться на главную</span></a>
+    </div>
+    <div id="overall-stats" class="window">
+        <div class="center"></div>
+        <table>
+            <tr>
+                <th colspan="2">Общая статистика</th>
+            </tr>
+            <tr>
+                <td>Общий счет:</td>
+                <td id="overallScore"></td>
+            </tr>
+            <tr>
+                <td>Пройдено уровней:</td>
+                <td id="overallLevelsPlayed"></td>
+            </tr>
+            <tr>
+                <td>Общее время игры:</td>
+                <td id="overallTimePlayed"></td>
+            </tr>
+        </table>
+        <a href="#" class="button" id="returnFromStatsToMainBtn"><span>Вернуться на главную</span></a>
+    </div>
+    <div id="pause" class="window">
+        <div class="center"></div>
+        <div class="inner">
+            <h3 id="pausedTitle">Paused</h3>
+            <a href="#" class="button" id="resumeLevelButton"><span>Возобновить уровень</span></a>
+            <a href="#" class="button" id="quitLevelButton"><span>Завершить уровень</span></a>
         </div>
-        <div id="main" class="window">
-            <div class="center"></div>
-            <a href="#" class="button" id="playGameBtn"><span>Начать игру</span></a>
-            <a href="#" class="button" id="overallStatsBtn"><span>Общая статистика</span></a>
-            <a href="#" class="button" id="resetGameDataBtn"><span>Сброс данных игры</span></a>
-        </div>
-        <div id="levels" class="window">
-            <h3>Уровни</h3>
-            <p>Пройдено: <strong><span id="completedLevels"></span>/10</strong></p>
-            <div class="levelList clearfix">
-                <div class="levelWrap">
-                    <a href="#" rel="0" class="level btnLevel"><span>1<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="1" class="level btnLevel"><span>2<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="2" class="level btnLevel"><span>3<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="3" class="level btnLevel"><span>4<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="4" class="level btnLevel"><span>5<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="5" class="level btnLevel"><span>6<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="6" class="level btnLevel"><span>7<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="7" class="level btnLevel"><span>8<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="8" class="level btnLevel"><span>9<small class="levelScore"></small></span></a>
-                </div>
-                <div class="levelWrap">
-                    <a href="#" rel="9" class="level btnLevel"><span>10<small class="levelScore"></small></span></a>
-                </div>
-            </div>
-            <a href="#" class="button" id="returnFromLevelsToMainBtn"><span>Вернуться на главную</span></a>
-        </div>
-        <div id="overall-stats" class="window">
-            <div class="center"></div>
-            <table>
-                <tr>
-                    <th colspan="2">Общая статистика</th>
-                </tr>
-                <tr>
-                    <td>Общий счет:</td>
-                    <td id="overallScore"></td>
-                </tr>
-                <tr>
-                    <td>Пройдено уровней:</td>
-                    <td id="overallLevelsPlayed"></td>
-                </tr>
-                <tr>
-                    <td>Общее время игры:</td>
-                    <td id="overallTimePlayed"></td>
-                </tr>
-            </table>
-            <a href="#" class="button" id="returnFromStatsToMainBtn"><span>Вернуться на главную</span></a>
-        </div>
-        <div id="game" class="window">
-            <canvas class="map" id="peopleCanvas"></canvas>
-            <canvas class="map" id="spiritCanvas"></canvas>
-            <canvas id="playerCanvas"></canvas>
-            <canvas id="teleportCanvas"></canvas>
-        </div>
-    </div><!-- end #game-wrap -->
-    <script>
-    </script>
+    </div>
+    <div id="game" class="window">
+        <canvas class="map" id="peopleCanvas"></canvas>
+        <canvas class="map" id="spiritCanvas"></canvas>
+        <canvas id="playerCanvas"></canvas>
+        <canvas id="teleportCanvas"></canvas>
+    </div>
+</div>
+<!-- end #game-wrap -->
+<script>
+</script>
 </body>
 </html>

@@ -20,7 +20,6 @@ var gameBackgroundSpirit;
 var tileSize;
 
 var savedData = null;
-var lastUpdate = null;
 var gamePeopleObjects = null;
 var gameSpiritObjects = null;
 var hero = null;
@@ -58,7 +57,6 @@ var oldTime;
 // user interface
 var ui = {};
 var goalPulseAngle = 0;
-var score = 0;
 
 /*===================================================================================================================*/
 /*Управление */
@@ -93,8 +91,11 @@ $(document).keyup(function (event) {
 var level;
 var levelPlaying;
 var menuMode;
+var pk;
+var levelStats = {};
 
-function initLevel(level) {
+function initLevel(script, level) {
+    pk = script;
     this.level = level;
     levelPlaying = true;
     menuMode = false;
@@ -131,8 +132,14 @@ function initGame() {
     initCanvas();
     initGameTiles();
 
-    lastUpdate = Date.now();
-    setInterval(gameLoop, 16);
+    levelStats = {
+        startTime: Date.now(),
+        endTime: 0,
+        pauseStartTime: 0,
+        pauseTimeTotal: 0,
+        score: 0
+    };
+    gameLoop();
 }
 
 function initData() {
@@ -459,7 +466,7 @@ function heroObject() {
     // Какой спрайт из изображения отобразим в данный момент
     this.whichSprite = 0;
     // На сколько пикселей мы хотим переместить героя каждый цикл
-    this.moveSpeed = 4;
+    this.moveSpeed = 60;
 
     this.render = function () {
         playerContext.drawImage(this.image, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
@@ -471,7 +478,6 @@ function heroObject() {
         var now = Date.now();
         // Сколько времени прошло с тех пор, как мы в последний раз обновили спрайт
         var delta = now - this.lastRender;
-        updateDelta();
 
         if (abilityToMove) {
             switch (this.keys[this.keys.length - 1]) {
@@ -602,14 +608,14 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
     for (iter in bonuses) {
         if (this.checkCollision(player, bonuses[iter])) {
             context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
-            if(bonuses[iter].id == 5){
-                score += 500;
-            }else if(bonuses[iter].id == 6){
-                score += 1000;
-            }else if(bonuses[iter].id == 7){
-                score += 2500;
-            }else{
-                score += 100;
+            if (bonuses[iter].id == 5) {
+                levelStats.score += 500;
+            } else if (bonuses[iter].id == 6) {
+                levelStats.score += 1000;
+            } else if (bonuses[iter].id == 7) {
+                levelStats.score += 2500;
+            } else {
+                levelStats.score += 100;
             }
 
             delete bonuses[iter];
@@ -661,10 +667,12 @@ function updateDelta() {
 }
 
 function gameLoop() {
-    var now = Date.now();
-    var elapsed = now - lastUpdate;
+    if(!menuMode){
+        requestAnimationFrame(gameLoop);
+    }
+    updateDelta();
     playerContext.fillRect(0, 0, gameW, gameH);
-    hero.update(elapsed / timerRatio);
+    hero.update(dt / timerRatio);
     playerContext.clearRect(fog.x + 1, fog.y + 1, fog.width - 2, fog.height - 2);
     hero.render();
     fog.render();
@@ -672,17 +680,16 @@ function gameLoop() {
     updateManaBar();
     updateUI();
     renderUI();
-    lastUpdate = now;
 }
 
 function updateUI() {
-    ui.ratioComplete = mana+'/'+manaToOpenDoor;
+    ui.ratioComplete = mana + '/' + manaToOpenDoor;
     ui.percentComplete = Math.round((mana / manaToOpenDoor) * 100);
 }
 
 function updateManaBar() {
-    if(goalPulseAngle < 360){
-        goalPulseAngle += 2 * (mana/manaToOpenDoor) * dt;
+    if (goalPulseAngle < 360) {
+        goalPulseAngle += 2 * (mana / manaToOpenDoor) * dt;
     } else {
         goalPulseAngle = 0;
     }
@@ -694,24 +701,24 @@ function renderUI() {
     playerContext.fillStyle = '#aaa';
     playerContext.textAlign = 'left';
     playerContext.font = 'bold 14px arial';
-    playerContext.fillText('Mana completion: '+ui.ratioComplete+' ('+ui.percentComplete+'%)', 180, 15);
+    playerContext.fillText('Mana completion: ' + ui.ratioComplete + ' (' + ui.percentComplete + '%)', 180, 15);
 
     // render top right text
     // score
     playerContext.fillStyle = '#aaa';
     playerContext.textAlign = 'right';
     playerContext.font = 'bold 14px arial';
-    playerContext.fillText('Score', (gameW-180), 15);
+    playerContext.fillText('Score', (gameW - 180), 15);
 
     playerContext.fillStyle = '#fff';
     playerContext.font = 'bold 16px arial';
-    playerContext.fillText(score.toString(), (gameW-180), 32);
+    playerContext.fillText(levelStats.score.toString(), (gameW - 180), 32);
 
     // render mana bar
     playerContext.fillStyle = 'rgba(34, 34, 34, .2)';//'#222';
     playerContext.fillRect(180, 25, 190, 10);
-    playerContext.fillStyle = 'hsla(210, 50%, '+(40+((Math.abs(180-goalPulseAngle))/180)*30)+'%, 0.8)';
-    playerContext.fillRect(180, 25, (mana/manaToOpenDoor)*190, 10);
+    playerContext.fillStyle = 'hsla(210, 50%, ' + (40 + ((Math.abs(180 - goalPulseAngle)) / 180) * 30) + '%, 0.8)';
+    playerContext.fillRect(180, 25, (mana / manaToOpenDoor) * 190, 10);
     // bar highlight
     var grad = playerContext.createLinearGradient(180, 25, 180, 29);
     grad.addColorStop(0, 'rgba(255,255,255, 0)');
@@ -720,4 +727,34 @@ function renderUI() {
     playerContext.fillRect(180, 25, 190, 5);
 
     playerContext.fillStyle = "#0d0d0d";
+}
+
+function hideWindows() {
+    $(document.querySelectorAll('.window')).fadeTo(animationSpeed, 0, function () {
+        $(this).hide();
+    });
+}
+
+function pauseLevel(e) {
+    if (e) {
+        e.preventDefault();
+    }
+    if (levelPlaying) {
+        $('#toggle-pause').toggleClass('off');
+        if (!menuMode) {
+            get('pausedTitle').innerHTML = 'Level ' + (level + 1) + ' Paused';
+            levelStats.pauseStartTime = Date.now();
+            menuMode = true;
+            $(get('pause')).stop().fadeTo(self.animationSpeed, 1);
+        } else {
+            hideWindows();
+            $(get('game')).stop().fadeTo(animationSpeed, 1);
+            setTimeout(function () {
+                menuMode = false;
+                oldTime = Date.now();
+                gameLoop();
+                levelStats.pauseTimeTotal += Date.now() - levelStats.pauseStartTime;
+            }, 500);
+        }
+    }
 }
