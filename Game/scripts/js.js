@@ -49,7 +49,7 @@ function ProdigalKnight() {
     dom.menuBar = $('#menu-bar');
     dom.buttonAudioTrue = $('#audioTrue');
     dom.buttonAudioFalse = $('#audioFalse');
-    var settings = {};
+    var settings = new Object();
     var user = new Object();
 
     /*============================================================================================*/
@@ -172,6 +172,15 @@ function ProdigalKnight() {
             } else {
                 $('#music')[0].pause();
             }
+            audio.playSound('click', settings.sound);
+        });
+
+        $('#toggleSound').click('click', function(e){
+            audio.playSound('click', settings.sound);
+            e.preventDefault();
+            settings.sound = !settings.sound;
+            $(this).toggleClass('off');
+            updateUser();
         });
 
         $('#togglePause').click('click', function (e) {
@@ -184,7 +193,7 @@ function ProdigalKnight() {
         e.preventDefault();
         hideWindows();
         $(levelsWindow).stop().fadeTo(animationSpeed, 1);
-
+        audio.playSound('click', settings.sound);
     }
 
     function overallStats(e) {
@@ -199,6 +208,7 @@ function ProdigalKnight() {
         overallStatsTimePlayed.innerHTML = minutes + ':' + seconds + ' <em class="td-note">(minutes:seconds)</em>';
 
         $(overallStatsWindow).stop().fadeTo(animationSpeed, 1);
+        audio.playSound('click', settings.sound);
     }
 
     function resetGameData(e) {
@@ -207,18 +217,21 @@ function ProdigalKnight() {
         if (confirmation) {
             clearUser();
         }
+        audio.playSound('click', settings.sound);
     }
 
     function returnToMain(e) {
         e.preventDefault();
         hideWindows();
         $(mainWindow).stop().fadeTo(animationSpeed, 1);
+        audio.playSound('click', settings.sound);
     }
 
     function returnToLevels(e) {
         e.preventDefault();
         hideWindows();
         $(levelsWindow).stop().fadeTo(animationSpeed, 1);
+        audio.playSound('click', settings.sound);
     }
 
     function startLevel(e) {
@@ -232,9 +245,10 @@ function ProdigalKnight() {
     }
 
     function retryLevel(){
-        initLevel(updateUser, user);
+        initLevel(updateUser, user, settings);
         $(gameWindow).stop().fadeTo(animationSpeed, 1);
         $('#gameBar').stop().fadeTo(animationSpeed, 1);
+        audio.playSound('click', settings.sound);
     }
 
     /*============================================================================================*/

@@ -134,13 +134,15 @@ $(document).keyup(function (event) {
 var levelPlaying;
 var menuMode;
 var user = new Object();
+var settings = new Object();
 var levelStats = {};
 var levelEndStatus = [];
 var upUser = new Object();
 
-function initLevel(updateUser, user) {
+function initLevel(updateUser, user, settings) {
     upUser = updateUser;
     this.user = user;
+    this.settings = settings;
     levelPlaying = true;
     menuMode = false;
     levelEndStatus = [false, false];
@@ -154,6 +156,8 @@ function initLevel(updateUser, user) {
     $(idPeopleCanvas).stop().fadeTo(animationSpeed, 1, function () {
         $.get("data/level" + user.level + ".xml?ver=" + Date.now(), processLoadGameData);
     });
+    console.log("tel");
+    audio.playSound('start', settings.sound);
 }
 
 function hideMaps() {
@@ -634,8 +638,16 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
             if (this.checkBonus(player, teleport[iter])) {
                 abilityToMove = false;
                 isTeleport = true;
+                if (isPeopleMap) {
+                    peopleContext.fillRect(teleport[iter].x, teleport[iter].y, teleport[iter].width, teleport[iter].height);
+                    peopleContext.drawImage(teleport[iter].image1, 0, 0, teleport[iter].imageSizeWidth1, teleport[iter].imageSizeHeight1,
+                        teleport[iter].x, teleport[iter].y, teleport[iter].width, teleport[iter].height);
+                }
+                delete teleport[iter];
+                audio.playSound('teleport', settings.sound);
             }
-        } else {
+        }
+        else {
             if (this.checkCollision(player, teleport[iter])) {
                 player.x = prevX;
                 player.y = prevY;
@@ -651,11 +663,14 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
                 mechanical[iter].x, mechanical[iter].y, mechanical[iter].width, mechanical[iter].height);
             delete mechanical[iter];
             mana++;
+            audio.playSound('mana', settings.sound);
         }
     }
 
     for (iter in scenery) {
         if (this.checkBonus(player, scenery[iter])) {
+            delete scenery[iter];
+            audio.playSound('success', settings.sound);
             levelEndStatus = [true, true];
         }
     }
@@ -667,18 +682,23 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
                 levelStats.score += 500;
                 if (isPeopleMap) {
                     levelStats.coinsСollected++;
+                    audio.playSound('coin', settings.sound);
                 } else {
                     levelStats.crystalsСollected++;
+                    audio.playSound('coin', settings.sound);
                 }
             } else if (bonuses[iter].id == 6) {
                 levelStats.score += 1000;
                 if (isPeopleMap) {
                     levelStats.diamondsСollected++;
+                    audio.playSound('coin', settings.sound);
                 } else {
                     levelStats.rubiesСollected++;
+                    audio.playSound('coin', settings.sound);
                 }
             } else {
                 levelStats.score += 100;
+                audio.playSound('coin', settings.sound);
             }
 
             delete bonuses[iter];
@@ -705,16 +725,17 @@ function port(player) {
     if (isPeopleMap) {
         player.x = player.portX;
         player.y = player.portY;
-        for (var iter in teleportPeople) {
-            if (checkBonus(player, teleportPeople[iter])) {
-                peopleContext.fillRect(teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
-                peopleContext.drawImage(teleportPeople[iter].image1, 0, 0, teleportPeople[iter].imageSizeWidth1, teleportPeople[iter].imageSizeHeight1,
-                    teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
-                delete teleportPeople[iter];
-                mana -= manaToOpenDoor;
-                drawReview(player, true);
-            }
-        }
+//        for (var iter in teleportPeople) {
+//            if (checkBonus(player, teleportPeople[iter])) {
+//                peopleContext.fillRect(teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
+//                peopleContext.drawImage(teleportPeople[iter].image1, 0, 0, teleportPeople[iter].imageSizeWidth1, teleportPeople[iter].imageSizeHeight1,
+//                    teleportPeople[iter].x, teleportPeople[iter].y, teleportPeople[iter].width, teleportPeople[iter].height);
+//                delete teleportPeople[iter];
+
+//            }
+//        }
+        mana -= manaToOpenDoor;
+        drawReview(player, true);
     } else {
         player.portX = player.x;
         player.portY = player.y;
@@ -823,6 +844,7 @@ function pauseLevel(e) {
             }, 500);
         }
     }
+    audio.playSound('click', settings.sound);
 }
 
 function quitLevel(e) {
@@ -831,8 +853,10 @@ function quitLevel(e) {
     hideWindows();
     $(get('game')).stop().fadeTo(animationSpeed, 1);
     menuMode = false;
+    audio.playSound('failure', settings.sound);
     levelEndStatus = [true, false];
     gameLoop();
+    audio.playSound('click', settings.sound);
 }
 
 /*============================================================================================*/
@@ -870,7 +894,9 @@ function endLevel() {
     for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
         user.overall.score += user.levels[levelIndex].score;
     }
-    user.overall.levelsPlayed += 1;
+    if(levelEndStatus[1]){
+        user.overall.levelsPlayed += 1;
+    }
     user.overall.timePlayed += (levelStats.endTime - levelStats.startTime - levelStats.pauseTimeTotal);
     upUser();
 }
