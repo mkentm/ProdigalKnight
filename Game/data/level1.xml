@@ -11,7 +11,8 @@
 		              src1="images/MANA_EMPTY.png" width1="256" height1="256"/>
 		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
 		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
-		<ObjectPeople id="P" type="player" src="images/SPIRIT_PEOPLE.png" width="32" height="32"/>
+		<ObjectPeople id="P" type="player" src="images/SPRITE_PEOPLE.png" width="32" height="32"
+		              src1="images/SPRITE_SPIRIT.png" width1="32" height1="32"/>
 		<!--Spirit-->
 		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.jpg" width="256" height="256"/>
 		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.jpg" width="256" height="256"/>

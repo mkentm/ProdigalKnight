@@ -156,7 +156,6 @@ function initLevel(updateUser, user, settings) {
     $(idPeopleCanvas).stop().fadeTo(animationSpeed, 1, function () {
         $.get("data/level" + user.level + ".xml?ver=" + Date.now(), processLoadGameData);
     });
-    console.log("tel");
     audio.playSound('start', settings.sound);
 }
 
@@ -225,7 +224,8 @@ function initGameBoard() {
             gamePeopleObjects[index].imageSrc = jQuery(this).attr("src");
             gamePeopleObjects[index].type = jQuery(this).attr("type");
             if (gamePeopleObjects[index].type.toString() == "teleport" ||
-                gamePeopleObjects[index].type.toString() == "mechanical") {
+                gamePeopleObjects[index].type.toString() == "mechanical" ||
+                gamePeopleObjects[index].type.toString() == "player") {
                 gamePeopleObjects[index].width1 = parseInt(jQuery(this).attr("width1"));
                 gamePeopleObjects[index].height1 = parseInt(jQuery(this).attr("height1"));
                 gamePeopleObjects[index].imageSrc1 = jQuery(this).attr("src1");
@@ -374,6 +374,8 @@ function initGameTiles() {
                         hero.image.onload = function () {
                             hero.render();
                         };
+                        hero.image1 = new Image();
+                        hero.image1.src = gamePeopleObjects[objIndex].imageSrc1;
 
                         drawReview(hero, true);
                     }
@@ -516,13 +518,18 @@ function heroObject() {
     this.animSpeed = 200;
     // Какие изображения мы используем для героя
     this.image = null;
+    this.image1 = null;
     // Какой спрайт из изображения отобразим в данный момент
     this.whichSprite = 0;
     // На сколько пикселей мы хотим переместить героя каждый цикл
     this.moveSpeed = 60;
 
     this.render = function () {
-        playerContext.drawImage(this.image, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
+        if (isPeopleMap) {
+            playerContext.drawImage(this.image, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
+        } else {
+            playerContext.drawImage(this.image1, this.whichSprite, 0, this.imageWidth, this.imageHeight, this.x, this.y, this.width, this.height);
+        }
     };
 
     this.update = function (elapsed) {
@@ -894,7 +901,7 @@ function endLevel() {
     for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
         user.overall.score += user.levels[levelIndex].score;
     }
-    if(levelEndStatus[1]){
+    if (levelEndStatus[1]) {
         user.overall.levelsPlayed += 1;
     }
     user.overall.timePlayed += (levelStats.endTime - levelStats.startTime - levelStats.pauseTimeTotal);
@@ -929,14 +936,14 @@ function gameLevelStats(status) {
 
     var startLevel = parseInt(user.level.toString());
 //    if(startLevel == 9){
-    if(startLevel == 4){
-        $(get('background_11')).stop().fadeTo(animationSpeed*20, 1,function() {
+    if (startLevel == 4) {
+        $(get('background_11')).stop().fadeTo(animationSpeed * 20, 1, function () {
             setTimeout(function () {
                 hideWindows();
                 $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
             }, 3000);
         });
-    }else{
+    } else {
         $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
     }
 }
