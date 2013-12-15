@@ -11,7 +11,7 @@ $(window).load(function () {
     });
 });
 
-var ProdigalKnight = function () {
+function ProdigalKnight() {
     var doc = document;
     var animationSpeed = 0;
     // window content
@@ -39,6 +39,7 @@ var ProdigalKnight = function () {
     var returnFromStatsToMainButton = get('returnFromStatsToMainBtn');
     // - pause
     var resumeLevelButton = get('resumeLevelButton');
+    var quitLevelButton = get('quitLevelButton');
     // DOM Object
     var dom = {};
     dom.menuAudio = $('#audio-select');
@@ -46,7 +47,8 @@ var ProdigalKnight = function () {
     dom.buttonAudioTrue = $('#audioTrue');
     dom.buttonAudioFalse = $('#audioFalse');
     var settings = {};
-    var user;
+    var user = new Object();
+
 
     /*============================================================================================*/
     /* Initialize Game */
@@ -129,6 +131,7 @@ var ProdigalKnight = function () {
         returnFromStatsToMainButton.addEventListener('click', returnToMain, false);
         resetGameDataButton.addEventListener('click', resetGameData, false);
         resumeLevelButton.addEventListener('click', pauseLevel, false);
+        quitLevelButton.addEventListener('click', quitLevel, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -167,7 +170,7 @@ var ProdigalKnight = function () {
             }
         });
 
-        $('#togglePause').click('click', function(e){
+        $('#togglePause').click('click', function (e) {
             e.preventDefault();
             pauseLevel();
         });
@@ -194,7 +197,7 @@ var ProdigalKnight = function () {
         $(overallStatsWindow).stop().fadeTo(animationSpeed, 1);
     }
 
-    function resetGameData (e) {
+    function resetGameData(e) {
         e.preventDefault();
         var confirmation = confirm('Вы уверены, что хотите сбросить данные игры? Это не может быть отменено.');
         if (confirmation) {
@@ -214,7 +217,7 @@ var ProdigalKnight = function () {
         if (!hasClass(this, 'disabled')) {
             hideWindows();
             var levelNumber = parseInt(this.getAttribute('rel'), 10);
-            initLevel(this, levelNumber);
+            initLevel(updateUser, user, levelNumber);
             $(gameWindow).stop().fadeTo(animationSpeed, 1);
         }
     }
@@ -222,7 +225,7 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     /* User */
     /*============================================================================================*/
-    function setupUser () {
+    function setupUser() {
         user = localStorage.getObject('prodigalKnightUser') || {
             highestLevelBeaten: 0,
             levels: [
@@ -247,12 +250,12 @@ var ProdigalKnight = function () {
         syncDOM();
     }
 
-    function updateUser () {
+    function updateUser() {
         localStorage.setObject('prodigalKnightUser', user);
         syncDOM();
     }
 
-    function clearUser () {
+    function clearUser() {
         localStorage.removeObject('prodigalKnightUser');
         setupUser();
         syncDOM();
@@ -261,7 +264,7 @@ var ProdigalKnight = function () {
     /*============================================================================================*/
     /* Sync Level to user object */
     /*============================================================================================*/
-    function syncDOM () {
+    function syncDOM() {
         // levels
         var i = levelButtons.length;
         while (i--) {
@@ -293,4 +296,4 @@ var ProdigalKnight = function () {
 //        user.overall.levelsPlayed += 1;
 //        updateUser();
 //    }
-}; // end game
+} // end game

@@ -91,14 +91,18 @@ $(document).keyup(function (event) {
 var level;
 var levelPlaying;
 var menuMode;
-var pk;
+var user;
 var levelStats = {};
+var levelEndStatus = [];
+var upUser = new Object();
 
-function initLevel(script, level) {
-    pk = script;
+function initLevel(updateUser, user, level) {
+    upUser = updateUser;
+    this.user = user;
     this.level = level;
     levelPlaying = true;
     menuMode = false;
+    levelEndStatus = [false, false];
 
     hideMaps();
     idPeopleCanvas = get("peopleCanvas");
@@ -605,6 +609,12 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
         }
     }
 
+    for (iter in scenery) {
+        if (this.checkBonus(player, scenery[iter])) {
+            levelEndStatus = [true, true];
+        }
+    }
+
     for (iter in bonuses) {
         if (this.checkCollision(player, bonuses[iter])) {
             context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
@@ -667,9 +677,12 @@ function updateDelta() {
 }
 
 function gameLoop() {
-    if(!menuMode){
+    // level end cycle
+    levelEndCycle();
+    if (!menuMode) {
         requestAnimationFrame(gameLoop);
     }
+
     updateDelta();
     playerContext.fillRect(0, 0, gameW, gameH);
     hero.update(dt / timerRatio);
@@ -745,7 +758,7 @@ function pauseLevel(e) {
             get('pausedTitle').innerHTML = 'Level ' + (level + 1) + ' Paused';
             levelStats.pauseStartTime = Date.now();
             menuMode = true;
-            $(get('pause')).stop().fadeTo(self.animationSpeed, 1);
+            $(get('pause')).stop().fadeTo(animationSpeed, 1);
         } else {
             hideWindows();
             $(get('game')).stop().fadeTo(animationSpeed, 1);
@@ -757,4 +770,50 @@ function pauseLevel(e) {
             }, 500);
         }
     }
+}
+
+function quitLevel(e) {
+    e.preventDefault();
+    $('#toggle-pause').toggleClass('off');
+    hideWindows();
+    $(get('game')).stop().fadeTo(animationSpeed, 1);
+    menuMode = false;
+    levelEndStatus = [true, false];
+    gameLoop();
+}
+
+/*============================================================================================*/
+/* Level Ending */
+/*============================================================================================*/
+function levelEndCycle() {
+    if (levelEndStatus[0]) {
+        teleportContext.globalCompositeOperation = 'source-over';
+        if (levelEndStatus[1]) {
+            teleportContext.fillStyle = 'rgba(255,255,255,' + teleportEndTick / teleportEndTickMax + ')';
+        } else {
+            teleportContext.fillStyle = 'rgba(70,0,0,' + teleportEndTick / teleportEndTickMax + ')';
+        }
+        teleportContext.fillRect(0, 0, gameW, gameH);
+        teleportContext.globalCompositeOperation = 'lighter';
+        if (teleportEndTick >= teleportEndTickMax) {
+            endLevel();
+            teleportContext.restore();
+        } else {
+            teleportEndTick += dt;
+        }
+    }
+}
+
+function endLevel() {
+    levelPlaying = false;
+    levelStats.endTime = Date.now();
+    menuMode = true;
+    hideWindows();
+    $(get('levels')).stop().fadeTo(animationSpeed, 1);
+
+    if(level >= user.highestLevelBeaten && levelEndStatus[1]){
+        user.highestLevelBeaten = level+1;
+    }
+
+    upUser();
 }
