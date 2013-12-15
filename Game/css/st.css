@@ -160,6 +160,10 @@ a:focus {
     display: none;
 }
 
+#help {
+    display: none;
+}
+
 /*===============================================================================================*/
 /*Канвас */
 /*===============================================================================================*/
@@ -503,4 +507,47 @@ strong {
 
 #gameBar #toggleUp, #gameBar #toggleDown {
     float: right;
+}
+
+/*============================================================================================*/
+/*Помощь */
+/*============================================================================================*/
+p.desc {
+    color: #666;
+    font-size: 14px;
+}
+
+p.desc a {
+    color: #999;
+}
+
+p.desc a:hover {
+    color: #fff;
+}
+
+#guide {
+    text-align: left;
+    /*margin: 0 auto;*/
+    /*width: auto;*/
+}
+
+#guide ul {
+    font-size: 14px;
+    /*margin: 0 0 20px;*/
+}
+
+#guide li {
+    list-style: none;
+    margin: 0 0 7px;
+}
+
+#guide li strong {
+    color: #fff;
+}
+
+h2{
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0 0 20px 10px;
 }

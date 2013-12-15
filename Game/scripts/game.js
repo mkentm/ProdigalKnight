@@ -941,10 +941,12 @@ function gameLevelStats(status) {
             setTimeout(function () {
                 hideWindows();
                 $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+                user.started = false;
             }, 3000);
         });
     } else {
         $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+        user.started = false;
     }
 }
 

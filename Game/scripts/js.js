@@ -20,6 +20,7 @@ function ProdigalKnight() {
     var levelsWindow = get('levels');
     var overallStatsWindow = get('overall-stats');
     var gameWindow = get('game');
+    var helpWindow = get('help');
     // overall stats content
     var overallStatsScore = get('overallScore');
     var overallStatsLevelsPlayed = get('overallLevelsPlayed');
@@ -43,6 +44,8 @@ function ProdigalKnight() {
     // - gameStats
     var retryLevelButton = get('retryLevelButton');
     var returnFromStatsToLevelsButton = get('returnFromStatsToLevelsBtn');
+    // - help
+    var returnFromHelpToMainBtn = get('returnFromHelpToMainBtn');
     // DOM Object
     var dom = {};
     dom.menuAudio = $('#audio-select');
@@ -136,6 +139,7 @@ function ProdigalKnight() {
         quitLevelButton.addEventListener('click', quitLevel, false);
         retryLevelButton.addEventListener('click', retryLevel, false);
         returnFromStatsToLevelsButton.addEventListener('click', returnToLevels, false);
+        returnFromHelpToMainBtn.addEventListener('click', returnToMain, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -186,6 +190,15 @@ function ProdigalKnight() {
         $('#togglePause').click('click', function (e) {
             e.preventDefault();
             pauseLevel();
+        });
+
+        $('#toggleHelp').click('click', function (e) {
+            e.preventDefault();
+            if (!user.started) {
+                hideWindows();
+                $(helpWindow).stop().fadeTo(animationSpeed, 1);
+                audio.playSound('click', settings.sound);
+            }
         });
     }
 
@@ -241,6 +254,7 @@ function ProdigalKnight() {
             hideWindows();
             user.level = parseInt(this.getAttribute('rel'), 10);
             var startLevel = parseInt(this.getAttribute('rel'), 10);
+            user.started = true;
             if (startLevel == 0) {
                 $('#background_0').stop().fadeTo(animationSpeed * 10, 1, function () {
                     setTimeout(function () {
@@ -252,7 +266,7 @@ function ProdigalKnight() {
                     }, 1000);
                 });
             } else {
-                $('#background_' + (startLevel + 1)).stop().fadeTo(animationSpeed*10, 1,function() {
+                $('#background_' + (startLevel + 1)).stop().fadeTo(animationSpeed * 10, 1, function () {
                     setTimeout(function () {
                         retryLevel();
                     }, 3000);
@@ -273,6 +287,7 @@ function ProdigalKnight() {
     /*============================================================================================*/
     function setupUser() {
         user = localStorage.getObject('prodigalKnightUser') || {
+            started: false,
             level: -1,
             highestLevelBeaten: 0,
             levels: [
