@@ -219,6 +219,7 @@ function ProdigalKnight() {
             var levelNumber = parseInt(this.getAttribute('rel'), 10);
             initLevel(updateUser, user, levelNumber);
             $(gameWindow).stop().fadeTo(animationSpeed, 1);
+            $('#gameBar').stop().fadeTo(animationSpeed, 1);
         }
     }
 

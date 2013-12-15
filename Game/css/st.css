@@ -123,7 +123,7 @@ canvas {
 }
 
 #teleportCanvas {
-    z-index: 4;
+    z-index: 8;
 }
 
 /*===============================================================================================*/
@@ -389,4 +389,45 @@ strong {
 
 .levelWrap:nth-child(10) .level span {
     color: hsl(300, 100%, 58%);
+}
+
+/*============================================================================================*/
+/*Game Bar */
+/*============================================================================================*/
+#gameBar {
+    display: none;
+    left: 0;
+    top: 580px;
+    height: 60px;
+    line-height: 60px;
+    position: absolute;
+    text-align: center;
+    width: 800px;
+    z-index: 9;
+}
+
+#gameBar a {
+    display: block;
+    background: rgba(255, 255, 255, .08);
+    color: #cccccc;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    height: 60px;
+    margin: 1px 1px 0 1px;
+    padding: 0 15px;
+    width: 50px;
+}
+
+#gameBar a:hover {
+    background: rgba(255, 255, 255, .1);
+    color: #ffffff;
+}
+
+#gameBar #toggleLeft, #gameBar #toggleRight {
+    float: left;
+}
+
+#gameBar #toggleUp, #gameBar #toggleDown {
+    float: right;
 }

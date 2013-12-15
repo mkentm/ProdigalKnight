@@ -61,6 +61,49 @@ var goalPulseAngle = 0;
 /*===================================================================================================================*/
 /*Управление */
 /*===================================================================================================================*/
+document.addEventListener("mousedown", mousedown);
+document.addEventListener("mouseup", mouseup);
+var mousedownID = -1;
+var keyCode = -1;
+
+function mousedown() {
+    $('#toggleLeft').mousedown(function (e) {
+        keyCode = 37;
+    });
+    $('#toggleRight').mousedown(function (e) {
+        keyCode = 39;
+    });
+    $('#toggleUp').mousedown(function (e) {
+        keyCode = 38;
+    });
+    $('#toggleDown').mousedown(function (e) {
+        keyCode = 40;
+    });
+    if (mousedownID == -1)
+        mousedownID = setInterval(whilemousedown, 50);
+}
+
+function mouseup() {
+    if (mousedownID != -1) {
+        clearInterval(mousedownID);
+        mousedownID = -1;
+        if (hero != null && keyCode != -1) {
+            var curKey = $.inArray(keyCode, hero.keys);
+            if (curKey > -1)
+                hero.keys.splice(curKey, 1);
+        }
+        keyCode = -1;
+    }
+}
+
+function whilemousedown() {
+    if (hero != null && keyCode != -1) {
+        var curKey = $.inArray(keyCode, hero.keys);
+        if (curKey == -1)
+            hero.keys.push(keyCode);
+    }
+}
+
 $(document).keydown(function (event) {
     if (36 < event.keyCode && event.keyCode < 41) {
         if (hero != null) {
@@ -798,6 +841,7 @@ function levelEndCycle() {
         if (teleportEndTick >= teleportEndTickMax) {
             endLevel();
             teleportContext.restore();
+            teleportContext.fillRect(0, 0, gameW, gameH);
         } else {
             teleportEndTick += dt;
         }
@@ -811,8 +855,8 @@ function endLevel() {
     hideWindows();
     $(get('levels')).stop().fadeTo(animationSpeed, 1);
 
-    if(level >= user.highestLevelBeaten && levelEndStatus[1]){
-        user.highestLevelBeaten = level+1;
+    if (level >= user.highestLevelBeaten && levelEndStatus[1]) {
+        user.highestLevelBeaten = level + 1;
     }
 
     upUser();
