@@ -40,6 +40,9 @@ function ProdigalKnight() {
     // - pause
     var resumeLevelButton = get('resumeLevelButton');
     var quitLevelButton = get('quitLevelButton');
+    // - gameStats
+    var retryLevelButton = get('retryLevelButton');
+    var returnFromStatsToLevelsButton = get('returnFromStatsToLevelsBtn');
     // DOM Object
     var dom = {};
     dom.menuAudio = $('#audio-select');
@@ -48,7 +51,6 @@ function ProdigalKnight() {
     dom.buttonAudioFalse = $('#audioFalse');
     var settings = {};
     var user = new Object();
-
 
     /*============================================================================================*/
     /* Initialize Game */
@@ -132,6 +134,8 @@ function ProdigalKnight() {
         resetGameDataButton.addEventListener('click', resetGameData, false);
         resumeLevelButton.addEventListener('click', pauseLevel, false);
         quitLevelButton.addEventListener('click', quitLevel, false);
+        retryLevelButton.addEventListener('click', retryLevel, false);
+        returnFromStatsToLevelsButton.addEventListener('click', returnToLevels, false);
 
         dom.buttonAudioTrue.click('click', function (e) {
             e.preventDefault();
@@ -211,16 +215,26 @@ function ProdigalKnight() {
         $(mainWindow).stop().fadeTo(animationSpeed, 1);
     }
 
+    function returnToLevels(e) {
+        e.preventDefault();
+        hideWindows();
+        $(levelsWindow).stop().fadeTo(animationSpeed, 1);
+    }
+
     function startLevel(e) {
         e.preventDefault();
         console.log("![" + parseInt(this.getAttribute('rel'), 10) + "]");
         if (!hasClass(this, 'disabled')) {
             hideWindows();
-            var levelNumber = parseInt(this.getAttribute('rel'), 10);
-            initLevel(updateUser, user, levelNumber);
-            $(gameWindow).stop().fadeTo(animationSpeed, 1);
-            $('#gameBar').stop().fadeTo(animationSpeed, 1);
+            user.level = parseInt(this.getAttribute('rel'), 10);
+            retryLevel();
         }
+    }
+
+    function retryLevel(){
+        initLevel(updateUser, user);
+        $(gameWindow).stop().fadeTo(animationSpeed, 1);
+        $('#gameBar').stop().fadeTo(animationSpeed, 1);
     }
 
     /*============================================================================================*/
@@ -228,6 +242,7 @@ function ProdigalKnight() {
     /*============================================================================================*/
     function setupUser() {
         user = localStorage.getObject('prodigalKnightUser') || {
+            level: -1,
             highestLevelBeaten: 0,
             levels: [
                 {score: 0},
@@ -279,22 +294,4 @@ function ProdigalKnight() {
         // set completed levels display
         completedLevelsDisplay.innerHTML = user.highestLevelBeaten;
     }
-
-    /*============================================================================================*/
-    /* Initialize Level */
-    /*============================================================================================*/
-//    function initLevel (level){
-//        user.levels[level].score = Math.round(Date.now());
-//        if (level >= user.highestLevelBeaten) {
-//            user.highestLevelBeaten = level + 1;
-//        }
-//
-//        user.overall.score = 0;
-//        for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
-//            user.overall.score += user.levels[levelIndex].score;
-//        }
-//
-//        user.overall.levelsPlayed += 1;
-//        updateUser();
-//    }
 } // end game

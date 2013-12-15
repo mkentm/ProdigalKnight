@@ -131,18 +131,16 @@ $(document).keyup(function (event) {
 /*===================================================================================================================*/
 /*Инициализация */
 /*===================================================================================================================*/
-var level;
 var levelPlaying;
 var menuMode;
-var user;
+var user = new Object();
 var levelStats = {};
 var levelEndStatus = [];
 var upUser = new Object();
 
-function initLevel(updateUser, user, level) {
+function initLevel(updateUser, user) {
     upUser = updateUser;
     this.user = user;
-    this.level = level;
     levelPlaying = true;
     menuMode = false;
     levelEndStatus = [false, false];
@@ -154,7 +152,7 @@ function initLevel(updateUser, user, level) {
     idTeleportCanvas = get("teleportCanvas");
 //    $(idPlayerCanvas).hide();
     $(idPeopleCanvas).stop().fadeTo(animationSpeed, 1, function () {
-        $.get("data/level" + level + ".xml?ver=" + Date.now(), processLoadGameData);
+        $.get("data/level" + user.level + ".xml?ver=" + Date.now(), processLoadGameData);
     });
 }
 
@@ -184,6 +182,10 @@ function initGame() {
         endTime: 0,
         pauseStartTime: 0,
         pauseTimeTotal: 0,
+        coinsСollected: 0,
+        diamondsСollected: 0,
+        crystalsСollected: 0,
+        rubiesСollected: 0,
         score: 0
     };
     gameLoop();
@@ -663,10 +665,18 @@ function check(player, collidables, teleport, mechanical, scenery, bonuses, prev
             context.fillRect(bonuses[iter].x, bonuses[iter].y, bonuses[iter].width, bonuses[iter].height);
             if (bonuses[iter].id == 5) {
                 levelStats.score += 500;
+                if (isPeopleMap) {
+                    levelStats.coinsСollected++;
+                } else {
+                    levelStats.crystalsСollected++;
+                }
             } else if (bonuses[iter].id == 6) {
                 levelStats.score += 1000;
-            } else if (bonuses[iter].id == 7) {
-                levelStats.score += 2500;
+                if (isPeopleMap) {
+                    levelStats.diamondsСollected++;
+                } else {
+                    levelStats.rubiesСollected++;
+                }
             } else {
                 levelStats.score += 100;
             }
@@ -798,7 +808,7 @@ function pauseLevel(e) {
     if (levelPlaying) {
         $('#toggle-pause').toggleClass('off');
         if (!menuMode) {
-            get('pausedTitle').innerHTML = 'Level ' + (level + 1) + ' Paused';
+            get('pausedTitle').innerHTML = 'Level ' + (user.level + 1) + ' Paused';
             levelStats.pauseStartTime = Date.now();
             menuMode = true;
             $(get('pause')).stop().fadeTo(animationSpeed, 1);
@@ -851,13 +861,58 @@ function levelEndCycle() {
 function endLevel() {
     levelPlaying = false;
     levelStats.endTime = Date.now();
-    menuMode = true;
-    hideWindows();
-    $(get('levels')).stop().fadeTo(animationSpeed, 1);
-
-    if (level >= user.highestLevelBeaten && levelEndStatus[1]) {
-        user.highestLevelBeaten = level + 1;
+    gameLevelStats(levelEndStatus[1]);
+    if (user.level >= user.highestLevelBeaten && levelEndStatus[1]) {
+        user.highestLevelBeaten = user.level + 1;
     }
 
+    user.overall.score = 0;
+    for (var levelIndex = 0; levelIndex < user.levels.length; levelIndex++) {
+        user.overall.score += user.levels[levelIndex].score;
+    }
+    user.overall.levelsPlayed += 1;
+    user.overall.timePlayed += (levelStats.endTime - levelStats.startTime - levelStats.pauseTimeTotal);
     upUser();
+}
+
+function gameLevelStats(status) {
+    menuMode = true;
+    hideWindows();
+
+    var milliseconds = levelStats.endTime - levelStats.startTime - levelStats.pauseTimeTotal;
+    var minutes = Math.floor(milliseconds / 1000 / 60);
+    var seconds = Math.floor(milliseconds / 1000) % 60;
+
+    levelStats.score = parseInt((levelStats.score * 100) / (minutes * 60 + seconds));
+
+    seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+    if (status) {
+        if (user.levels[user.level].score == 0 || (levelStats.score > user.levels[user.level].score)) {
+            user.levels[user.level].score = Math.round(levelStats.score);
+        }
+    }
+
+    get('statsStatus').innerHTML = (status) ? '<span class="levelSuccess">Уровень ' + (user.level + 1) + ' пройден' : '<span class="levelFail">Уровень ' + (user.level + 1) + ' не пройден</span>';
+    get('statsDuration').innerHTML = minutes + ':' + seconds;
+    get('statsСoinsСollected').innerHTML = levelStats.coinsСollected;
+    get('statsDiamondsСollected').innerHTML = levelStats.diamondsСollected;
+    get('statsCrystalsСollected').innerHTML = levelStats.crystalsСollected;
+    get('statsRubiesСollected').innerHTML = levelStats.rubiesСollected;
+    get('statsScore').innerHTML = commas(Math.round(levelStats.score));
+
+    $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+}
+
+// add commas to large numbers - source: http://stackoverflow.com/questions/6392102/add-commas-to-javascript-output
+function commas(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
 }

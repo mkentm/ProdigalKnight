@@ -85,6 +85,11 @@ a:focus {
     background: url(../images/OVERALL_STATS.png);
 }
 
+#game-stats {
+    display: none;
+    background: url(../images/OVERALL_STATS.png);
+}
+
 #pause {
     display: none;
     background: rgba(20, 20, 20, .5);
@@ -332,7 +337,7 @@ strong {
     bottom: 12px;
     display: block;
     font-style: normal;
-    font-size: 10px;
+    font-size: 14px;
 }
 
 .level span {
@@ -389,6 +394,14 @@ strong {
 
 .levelWrap:nth-child(10) .level span {
     color: hsl(300, 100%, 58%);
+}
+
+.levelSuccess {
+    color: #7f7;
+}
+
+.levelFail {
+    color: #f22;
 }
 
 /*============================================================================================*/

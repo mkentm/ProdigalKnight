@@ -11,13 +11,13 @@
 		              src1="images/MANA_EMPTY.png" width1="256" height1="256"/>
 		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
 		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
-		<ObjectPeople id="7" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
 		<ObjectPeople id="P" type="player" src="images/SPIRIT_PEOPLE.png" width="32" height="32"/>
 		<!--Spirit-->
 		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.jpg" width="256" height="256"/>
 		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.jpg" width="256" height="256"/>
 		<ObjectSpirit id="3" type="teleport" src="images/PORTAL_FROZEN.png" width="256" height="256"/>
 		<ObjectSpirit id="5" type="bonus" src="images/BONUS_MINERAL.png" width="32" height="32"/>
+		<ObjectSpirit id="6" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
 		<!--Player-->
 	</Objects>
 	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
@@ -26,9 +26,9 @@
 		<GridRow id="people">1151110160101010050101111</GridRow>
 		<GridRow id="people">6001110110051000110150001</GridRow>
 		<GridRow id="people">1111110011101111110001151</GridRow>
-		<GridRow id="people">1150011500501700010101101</GridRow>
+		<GridRow id="people">1150011500501600010101101</GridRow>
 		<GridRow id="people">1101001111101011050101141</GridRow>
-		<GridRow id="people">7001100500501001111150111</GridRow>
+		<GridRow id="people">6001100500501001111150111</GridRow>
 		<GridRow id="people">1111111111011000050110006</GridRow>
 		<GridRow id="people">0501105001010011110011101</GridRow>
 		<GridRow id="people">1101101100010110411001101</GridRow>
@@ -38,9 +38,9 @@
 		<GridRow id="people">1100110511001011110151105</GridRow>
 		<GridRow id="people">1101110111011600110100110</GridRow>
 		<GridRow id="people">1101110111011115000110010</GridRow>
-		<GridRow id="people">0500617050005011111111015</GridRow>
+		<GridRow id="people">0500616050005011111111015</GridRow>
 		<GridRow id="people">1111111111111000500005010</GridRow>
-		<GridRow id="people">1100011700011311111111110</GridRow>
+		<GridRow id="people">1100011600011311111111110</GridRow>
 		<GridRow id="people">2051050011005011114060500</GridRow>
 		<!--Spirit-->
 		<GridRow id="spirit">1505050505010105050505051</GridRow>
