@@ -175,7 +175,7 @@ function ProdigalKnight() {
             audio.playSound('click', settings.sound);
         });
 
-        $('#toggleSound').click('click', function(e){
+        $('#toggleSound').click('click', function (e) {
             audio.playSound('click', settings.sound);
             e.preventDefault();
             settings.sound = !settings.sound;
@@ -240,14 +240,31 @@ function ProdigalKnight() {
         if (!hasClass(this, 'disabled')) {
             hideWindows();
             user.level = parseInt(this.getAttribute('rel'), 10);
-            retryLevel();
+            var startLevel = parseInt(this.getAttribute('rel'), 10);
+            if (startLevel == 0) {
+                $('#background_0').stop().fadeTo(animationSpeed * 10, 1, function () {
+                    setTimeout(function () {
+                        $('#background_1').stop().fadeTo(animationSpeed * 15, 1, function () {
+                            setTimeout(function () {
+                                retryLevel();
+                            }, 4000);
+                        });
+                    }, 1000);
+                });
+            } else {
+                $('#background_' + (startLevel + 1)).stop().fadeTo(animationSpeed*10, 1,function() {
+                    setTimeout(function () {
+                        retryLevel();
+                    }, 3000);
+                });
+            }
         }
     }
 
-    function retryLevel(){
-        initLevel(updateUser, user, settings);
+    function retryLevel() {
         $(gameWindow).stop().fadeTo(animationSpeed, 1);
         $('#gameBar').stop().fadeTo(animationSpeed, 1);
+        initLevel(updateUser, user, settings);
         audio.playSound('click', settings.sound);
     }
 

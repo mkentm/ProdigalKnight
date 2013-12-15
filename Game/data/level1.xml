@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<GameData>
+	<Objects>
+		<!--People-->
+		<ObjectPeople id="0" type="nothing" src="images/ROAD_SAND_TILE.png" width="32" height="32"/>
+		<ObjectPeople id="1" type="collidable" src="images/WALL_BRICK.png" width="32" height="32"/>
+		<ObjectPeople id="2" type="scenery" src="images/DECORATE_DOOR.png" width="32" height="32"/>
+		<ObjectPeople id="3" type="teleport" src="images/MAGICAL_DOOR_CLOSE.png" width="256" height="256"
+		              src1="images/MAGICAL_DOOR_OPEN.png" width1="256" height1="256"/>
+		<ObjectPeople id="4" type="mechanical" src="images/MANA_FULL.png" width="256" height="256"
+		              src1="images/MANA_EMPTY.png" width1="256" height1="256"/>
+		<ObjectPeople id="5" type="bonus" src="images/BONUS_COIN.png" width="32" height="32"/>
+		<ObjectPeople id="6" type="bonus" src="images/BONUS_DIAMOND1.png" width="32" height="32"/>
+		<ObjectPeople id="P" type="player" src="images/SPIRIT_PEOPLE.png" width="32" height="32"/>
+		<!--Spirit-->
+		<ObjectSpirit id="0" type="nothing" src="images/ROAD_FROZEN.jpg" width="256" height="256"/>
+		<ObjectSpirit id="1" type="collidable" src="images/WALL_BRICK_FROZEN.jpg" width="256" height="256"/>
+		<ObjectSpirit id="3" type="teleport" src="images/PORTAL_FROZEN.png" width="256" height="256"/>
+		<ObjectSpirit id="5" type="bonus" src="images/BONUS_MINERAL.png" width="120" height="120"/>
+		<ObjectSpirit id="6" type="bonus" src="images/BONUS_DIAMOND2.png" width="32" height="32"/>
+		<!--Player-->
+	</Objects>
+	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
+		<!--People-->
+		<GridRow id="people">110050011110501111110000P</GridRow>
+		<GridRow id="people">1151110160101010050101111</GridRow>
+		<GridRow id="people">6001110110051000110150001</GridRow>
+		<GridRow id="people">1111110011101111110001151</GridRow>
+		<GridRow id="people">1150011500501600010101101</GridRow>
+		<GridRow id="people">1101001111101011050101141</GridRow>
+		<GridRow id="people">6001100500501001111150111</GridRow>
+		<GridRow id="people">1111111111011000050110006</GridRow>
+		<GridRow id="people">0501105001010011110011101</GridRow>
+		<GridRow id="people">1101101100010110411001101</GridRow>
+		<GridRow id="people">1101101111110116111105001</GridRow>
+		<GridRow id="people">0500001000500510111111011</GridRow>
+		<GridRow id="people">1110111011101010500100001</GridRow>
+		<GridRow id="people">1100110511001011110151105</GridRow>
+		<GridRow id="people">1101110111011600110100110</GridRow>
+		<GridRow id="people">1101110111011115000110010</GridRow>
+		<GridRow id="people">0500616050005011111111015</GridRow>
+		<GridRow id="people">1111111111111000500005010</GridRow>
+		<GridRow id="people">1100011600011311111111110</GridRow>
+		<GridRow id="people">2051050011005011114060500</GridRow>
+		<!--Spirit-->
+		<GridRow id="spirit">1505050505010105050505051</GridRow>
+		<GridRow id="spirit">1011111111010101111111101</GridRow>
+		<GridRow id="spirit">1505050311000001050501151</GridRow>
+		<GridRow id="spirit">1011111111010111511111101</GridRow>
+		<GridRow id="spirit">1505050505010111050505051</GridRow>
+		<GridRow id="spirit">1111111111110111111111111</GridRow>
+		<GridRow id="spirit">1000000000010100000000001</GridRow>
+		<GridRow id="spirit">1551515151000001151515101</GridRow>
+		<GridRow id="spirit">1551515151010101151515101</GridRow>
+		<GridRow id="spirit">1000000000010100000000001</GridRow>
+		<GridRow id="spirit">1111111111110111115555551</GridRow>
+		<GridRow id="spirit">1000000001505050511111111</GridRow>
+		<GridRow id="spirit">1151511101050505015050501</GridRow>
+		<GridRow id="spirit">5551555100505050500505051</GridRow>
+		<GridRow id="spirit">1111111101050505015050501</GridRow>
+		<GridRow id="spirit">1000000001505050511111101</GridRow>
+		<GridRow id="spirit">1511111111111011115050501</GridRow>
+		<GridRow id="spirit">1511005551110001510505051</GridRow>
+		<GridRow id="spirit">1000015551110001510111111</GridRow>
+		<GridRow id="spirit">1111115551110001500111111</GridRow>
+	</Grid>
+	<Reviews>
+		<Visibility id="0" type="people" src="images/VISIBILITY_PEOPLE.png" width="160" height="160"/>
+		<Visibility id="1" type="spirit" src="images/VISIBILITY_SPIRIT.png" width="192" height="192"/>
+	</Reviews>
+</GameData>

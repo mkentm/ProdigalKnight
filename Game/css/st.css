@@ -96,6 +96,66 @@ a:focus {
     z-index: 10;
 }
 
+#background_0 {
+    display: none;
+    background: url(../images/levels/00.jpg);
+}
+
+#background_1 {
+    display: none;
+    background: url(../images/levels/01.jpg);
+}
+
+#background_2 {
+    display: none;
+    background: url(../images/levels/02.jpg);
+}
+
+#background_3 {
+    display: none;
+    background: url(../images/levels/03.jpg);
+}
+
+#background_4 {
+    display: none;
+    background: url(../images/levels/04.jpg);
+}
+
+#background_5 {
+    display: none;
+    background: url(../images/levels/05.jpg);
+}
+
+#background_6 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
+#background_7 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
+#background_8 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
+#background_9 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
+#background_10 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
+#background_11 {
+    display: none;
+    background: url(../images/levels/06.jpg);
+}
+
 #game {
     display: none;
 }
@@ -211,7 +271,7 @@ canvas {
     position: absolute;
     text-align: center;
     width: 800px;
-    z-index: 50;
+    z-index: 51;
 }
 
 #menu-bar a {

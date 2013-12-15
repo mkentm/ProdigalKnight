@@ -927,7 +927,18 @@ function gameLevelStats(status) {
     get('statsRubiesСollected').innerHTML = levelStats.rubiesСollected;
     get('statsScore').innerHTML = commas(Math.round(levelStats.score));
 
-    $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+    var startLevel = parseInt(user.level.toString());
+//    if(startLevel == 9){
+    if(startLevel == 4){
+        $(get('background_11')).stop().fadeTo(animationSpeed*20, 1,function() {
+            setTimeout(function () {
+                hideWindows();
+                $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+            }, 3000);
+        });
+    }else{
+        $(get('game-stats')).stop().fadeTo(animationSpeed, 1);
+    }
 }
 
 // add commas to large numbers - source: http://stackoverflow.com/questions/6392102/add-commas-to-javascript-output
