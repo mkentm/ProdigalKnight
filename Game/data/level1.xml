@@ -23,47 +23,47 @@
 	</Objects>
 	<Grid tileSize="32" width="25" height="20" backgroundPeople="#5C3F25" backgroundSpirit="#52F3C5">
 		<!--People-->
-		<GridRow id="people">110050011110501111110000P</GridRow>
-		<GridRow id="people">1151110160101010050101111</GridRow>
-		<GridRow id="people">6001110110051000110150001</GridRow>
-		<GridRow id="people">1111110011101111110001151</GridRow>
-		<GridRow id="people">1150011500501600010101101</GridRow>
-		<GridRow id="people">1101001111101011050101141</GridRow>
-		<GridRow id="people">6001100500501001111150111</GridRow>
-		<GridRow id="people">1111111111011000050110006</GridRow>
-		<GridRow id="people">0501105001010011110011101</GridRow>
-		<GridRow id="people">1101101100010110411001101</GridRow>
-		<GridRow id="people">1101101111110116111105001</GridRow>
-		<GridRow id="people">0500001000500510111111011</GridRow>
-		<GridRow id="people">1110111011101010500100001</GridRow>
-		<GridRow id="people">1100110511001011110151105</GridRow>
-		<GridRow id="people">1101110111011600110100110</GridRow>
-		<GridRow id="people">1101110111011115000110010</GridRow>
-		<GridRow id="people">0500616050005011111111015</GridRow>
-		<GridRow id="people">1111111111111000500005010</GridRow>
-		<GridRow id="people">1100011600011311111111110</GridRow>
-		<GridRow id="people">2051050011005011114060500</GridRow>
+		<GridRow id="people">1111111111111111111111111</GridRow>
+		<GridRow id="people">10615651010505050051500P1</GridRow>
+		<GridRow id="people">1011515151510111110101111</GridRow>
+		<GridRow id="people">1511010101015100610105051</GridRow>
+		<GridRow id="people">1005010501010141015101101</GridRow>
+		<GridRow id="people">1011010101510111010051101</GridRow>
+		<GridRow id="people">1051515100015050511101151</GridRow>
+		<GridRow id="people">1101565151011111116101111</GridRow>
+		<GridRow id="people">1101111101050500500150001</GridRow>
+		<GridRow id="people">1150050051111011110111101</GridRow>
+		<GridRow id="people">1111011111561516015050151</GridRow>
+		<GridRow id="people">1505011400051011011010101</GridRow>
+		<GridRow id="people">1011001110101001505010001</GridRow>
+		<GridRow id="people">1011150050101150010111151</GridRow>
+		<GridRow id="people">1600111111151111010150501</GridRow>
+		<GridRow id="people">1110505005000500505101111</GridRow>
+		<GridRow id="people">1111111015111111111101141</GridRow>
+		<GridRow id="people">1200003010100501111150601</GridRow>
+		<GridRow id="people">1111111115001105061111111</GridRow>
+		<GridRow id="people">1111111111111111111111111</GridRow>
 		<!--Spirit-->
-		<GridRow id="spirit">1505050505010105050505051</GridRow>
-		<GridRow id="spirit">1011111111010101111111101</GridRow>
-		<GridRow id="spirit">1505050311000001050501151</GridRow>
-		<GridRow id="spirit">1011111111010111511111101</GridRow>
-		<GridRow id="spirit">1505050505010111050505051</GridRow>
-		<GridRow id="spirit">1111111111110111111111111</GridRow>
-		<GridRow id="spirit">1000000000010100000000001</GridRow>
-		<GridRow id="spirit">1551515151000001151515101</GridRow>
-		<GridRow id="spirit">1551515151010101151515101</GridRow>
-		<GridRow id="spirit">1000000000010100000000001</GridRow>
-		<GridRow id="spirit">1111111111110111115555551</GridRow>
-		<GridRow id="spirit">1000000001505050511111111</GridRow>
-		<GridRow id="spirit">1151511101050505015050501</GridRow>
-		<GridRow id="spirit">5551555100505050500505051</GridRow>
-		<GridRow id="spirit">1111111101050505015050501</GridRow>
-		<GridRow id="spirit">1000000001505050511111101</GridRow>
-		<GridRow id="spirit">1511111111111011115050501</GridRow>
-		<GridRow id="spirit">1511005551110001510505051</GridRow>
-		<GridRow id="spirit">1000015551110001510111111</GridRow>
-		<GridRow id="spirit">1111115551110001500111111</GridRow>
+		<GridRow id="spirit">1111111111111111111111111</GridRow>
+		<GridRow id="spirit">1505150515051015051111111</GridRow>
+		<GridRow id="spirit">1060006000600000600000111</GridRow>
+		<GridRow id="spirit">1505150515051015051110111</GridRow>
+		<GridRow id="spirit">1101110111111011111110111</GridRow>
+		<GridRow id="spirit">1101150511111011111505051</GridRow>
+		<GridRow id="spirit">1101156016050005061060601</GridRow>
+		<GridRow id="spirit">1101106510000100001506051</GridRow>
+		<GridRow id="spirit">1101150515010501051050501</GridRow>
+		<GridRow id="spirit">1505110110001010001110111</GridRow>
+		<GridRow id="spirit">1060000000150305100000001</GridRow>
+		<GridRow id="spirit">1505110110001010001110111</GridRow>
+		<GridRow id="spirit">1101150515010501051050501</GridRow>
+		<GridRow id="spirit">1001106010000100001506051</GridRow>
+		<GridRow id="spirit">1011150516050005061060601</GridRow>
+		<GridRow id="spirit">1011110111111011111505051</GridRow>
+		<GridRow id="spirit">1011100011115051111110111</GridRow>
+		<GridRow id="spirit">1000000000000600000000111</GridRow>
+		<GridRow id="spirit">1111100011115051111111111</GridRow>
+		<GridRow id="spirit">1111111111111111111111111</GridRow>
 	</Grid>
 	<Reviews>
 		<Visibility id="0" type="people" src="images/VISIBILITY_PEOPLE.png" width="160" height="160"/>
